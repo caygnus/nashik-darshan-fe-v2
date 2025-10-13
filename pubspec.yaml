@@ -1,12 +1,8 @@
-name: nashikdarshan
+name: nashik
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
-
-# Scripts to run with 'dart run'
-scripts:
-  setup_hooks: dart scripts/setup_hooks.dart
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -23,7 +19,7 @@ scripts:
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.7.0
+  sdk: ^3.9.2
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -38,6 +34,18 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  bloc: ^9.0.1
+  dio: ^5.7.0
+  shared_preferences: ^2.5.3
+  intl: any
+  go_router: ^16.1.0
+  flutter_bloc: ^9.1.1
+  get_it: ^8.2.0
+  flutter_screenutil: ^5.9.3
+  google_fonts: ^6.2.1
+  url_launcher: ^6.3.1
+  awesome_snackbar_content_new: ^0.1.2
+  animated_text_kit: ^4.2.2
 
 dev_dependencies:
   flutter_test:
@@ -50,19 +58,12 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
 
-  # Commit linting packages
-  commitlint_cli: ^0.8.1
-  husky: ^0.1.7
-
-  # Code formatting
-  dart_code_metrics: ^5.7.6
-  dart_style: ^2.3.0
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
 flutter:
+
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
