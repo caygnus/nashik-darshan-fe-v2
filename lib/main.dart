@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nashik/android_app.dart';
 import 'package:nashik/ios_app.dart';
@@ -19,15 +19,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(360, 920),
-      child: MultiBlocProvider(
-        providers: [
-          // BlocProvider(
-
-          //   child: Container(),
-          // ),
-        ],
-        child: Platform.isIOS ? const IosApp() : const AndroidApp(),
-      ),
+      // TODO: Add MultiBlocProvider back when you have actual BlocProviders
+      // child: MultiBlocProvider(
+      //   providers: [
+      //     BlocProvider(
+      //       create: (context) => YourBloc(),
+      //       child: Container(),
+      //     ),
+      //   ],
+      child: Platform.isIOS ? const IosApp() : const AndroidApp(),
+      // ),
     );
   }
 }
