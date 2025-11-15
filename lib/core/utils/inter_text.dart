@@ -23,9 +23,7 @@ class InterText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: GoogleFonts.plusJakartaSans(
-        textStyle: style,
-      ),
+      style: GoogleFonts.plusJakartaSans(textStyle: style),
       textAlign: textAlign,
       overflow: overflow,
       maxLines: maxLines,

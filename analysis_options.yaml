@@ -12,6 +12,13 @@ include: package:flutter_lints/flutter.yaml
 analyzer:
   plugins:
     - dart_code_metrics
+  # Exclude generated files and build outputs from analysis
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/generated/**"
+    - "build/**"
+    - ".dart_tool/**"
 
 linter:
   # The lint rules applied to this project can be customized in the
@@ -36,5 +43,24 @@ linter:
     avoid_void_async: true
     directives_ordering: true
     sort_pub_dependencies: true
+
+# Formatter Configuration
+# The Dart formatter is configured via command-line flags or IDE settings.
+# Default line length: 80 characters (configured in .cursor.config.json)
+# 
+# To format all Dart files:
+#   dart format .
+# 
+# To format specific files:
+#   dart format lib/
+# 
+# To check formatting without modifying files:
+#   dart format --set-exit-if-changed .
+#
+# The formatter automatically handles:
+# - Indentation (2 spaces)
+# - Line breaks
+# - Spacing around operators
+# - Import ordering (handled by directives_ordering lint rule)
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

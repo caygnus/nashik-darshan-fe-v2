@@ -8,11 +8,7 @@ class ViewAllButtonWidget extends StatelessWidget {
   final VoidCallback? onTap;
   final String text;
 
-  const ViewAllButtonWidget({
-    super.key,
-    this.onTap,
-    this.text = 'View All',
-  });
+  const ViewAllButtonWidget({super.key, this.onTap, this.text = 'View All'});
 
   @override
   Widget build(BuildContext context) {
@@ -31,4 +27,3 @@ class ViewAllButtonWidget extends StatelessWidget {
     );
   }
 }
-

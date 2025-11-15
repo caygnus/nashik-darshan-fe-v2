@@ -2,13 +2,25 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nashik/android_app.dart';
+import 'package:nashik/core/env/config.dart';
+import 'package:nashik/core/get_it/get_it.dart';
+import 'package:nashik/core/supabase/config.dart';
 import 'package:nashik/ios_app.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Config (loads .env file)
+  await Config.instance;
+
+  // Initialize Supabase with environment variables
+  await SupabaseConfig.initialize();
+
+  // Initialize service locator (encrypted secure storage)
+  await serviceLocatorInit();
+
   runApp(const MyApp());
 }
 

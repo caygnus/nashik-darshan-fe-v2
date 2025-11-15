@@ -45,21 +45,14 @@ class TravelOptionBox extends StatelessWidget {
               height: 48.h,
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFFFF914D),
-                    Color(0xFFFFB347),
-                  ],
+                  colors: [Color(0xFFFF914D), Color(0xFFFFB347)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
                 shape: BoxShape.circle,
               ),
               child: Center(
-                child: Icon(
-                  icon,
-                  color: Colors.white,
-                  size: 24.sp,
-                ),
+                child: Icon(icon, color: Colors.white, size: 24.sp),
               ),
             ),
             SizedBox(width: 12.w),
@@ -103,4 +96,3 @@ class TravelOptionBox extends StatelessWidget {
     );
   }
 }
-

@@ -24,10 +24,7 @@ class PromotionalBoxWidget extends StatelessWidget {
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [
-            Color(0xFFFF944D),
-            Color(0xFFFFB247),
-          ],
+          colors: [Color(0xFFFF944D), Color(0xFFFFB247)],
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),
@@ -79,4 +76,3 @@ class PromotionalBoxWidget extends StatelessWidget {
     );
   }
 }
-

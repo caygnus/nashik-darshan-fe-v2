@@ -50,4 +50,3 @@ class CityToCityTravelSection extends StatelessWidget {
     );
   }
 }
-

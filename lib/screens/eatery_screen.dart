@@ -58,7 +58,7 @@ class _EateryScreenState extends State<EateryScreen> {
                 },
               ),
               SizedBox(height: 16.h),
-              
+
               // Category Selection
               CategorySelectionWidget(
                 categories: const ['Restaurants', 'Hotels', 'Street Food'],
@@ -70,7 +70,7 @@ class _EateryScreenState extends State<EateryScreen> {
                 },
               ),
               SizedBox(height: 16.h),
-              
+
               // Filter Buttons
               FilterButtonsWidget(
                 filters: const ['All', 'Veg Only', 'Budget', 'Top Rated'],
@@ -82,14 +82,11 @@ class _EateryScreenState extends State<EateryScreen> {
                 },
               ),
               SizedBox(height: 12.h),
-              
+
               // Result Count
-              const ResultCountWidget(
-                count: 150,
-                itemType: 'Restaurants',
-              ),
+              const ResultCountWidget(count: 150, itemType: 'Restaurants'),
               SizedBox(height: 16.h),
-              
+
               // Promotional Box
               const PromotionalBoxWidget(
                 heading: 'Don\'t Miss Out',
@@ -97,7 +94,7 @@ class _EateryScreenState extends State<EateryScreen> {
                 iconPath: 'assets/svg/spoun.svg',
               ),
               SizedBox(height: 16.h),
-              
+
               // Restaurant Cards
               ListingCardWidget(
                 imagePath: 'assets/images/home-hero.png',
@@ -106,7 +103,8 @@ class _EateryScreenState extends State<EateryScreen> {
                 rating: '4.4',
                 ratingColor: const Color(0xFF22C55E),
                 type: 'Continental • Wine Tasting',
-                description: 'Perfect vineyard retreat with wine tasting experience',
+                description:
+                    'Perfect vineyard retreat with wine tasting experience',
                 price: '999',
                 location: '12 km from city',
                 feature: 'Wine Tours',
@@ -117,7 +115,7 @@ class _EateryScreenState extends State<EateryScreen> {
                 },
               ),
               SizedBox(height: 16.h),
-              
+
               ListingCardWidget(
                 imagePath: 'assets/images/home-hero.png',
                 category: 'Popular Choice',
@@ -125,7 +123,8 @@ class _EateryScreenState extends State<EateryScreen> {
                 rating: '4.4',
                 ratingColor: const Color(0xFF22C55E),
                 type: 'Satvik • Temple Food',
-                description: 'Pure satvik meals perfect for pilgrims and devotees, Jain food is also Available',
+                description:
+                    'Pure satvik meals perfect for pilgrims and devotees, Jain food is also Available',
                 price: '452',
                 location: 'Near Trimbakeshwar',
                 feature: 'Jain Friendly',
@@ -136,7 +135,7 @@ class _EateryScreenState extends State<EateryScreen> {
                 },
               ),
               SizedBox(height: 20.h),
-              
+
               // View All Button
               ViewAllButtonWidget(
                 onTap: () {
@@ -144,18 +143,19 @@ class _EateryScreenState extends State<EateryScreen> {
                 },
               ),
               SizedBox(height: 24.h),
-              
+
               // Popular from Users Section
               const SectionTitleWidget(title: 'Popular from Users'),
               SizedBox(height: 16.h),
-              
+
               // User Review Card
               UserReviewCardWidget(
                 profileImage: 'assets/images/home-hero.png',
                 name: 'Priya Sharma',
                 city: 'Mumbai',
                 planTitle: 'Solo Spiritual Journey',
-                planDescription: 'Perfect 1-day plan for peaceful darshan and meditation',
+                planDescription:
+                    'Perfect 1-day plan for peaceful darshan and meditation',
                 rating: '4.8',
                 reviewCount: '124',
                 onUsePlanTap: () {

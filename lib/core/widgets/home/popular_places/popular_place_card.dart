@@ -125,4 +125,3 @@ class PopularPlaceCard extends StatelessWidget {
     );
   }
 }
-

@@ -23,9 +23,7 @@ class FilterButtonsWidget extends StatelessWidget {
       children: filters.map((filter) {
         return Expanded(
           child: Padding(
-            padding: EdgeInsets.only(
-              right: filter == filters.last ? 0 : 8.w,
-            ),
+            padding: EdgeInsets.only(right: filter == filters.last ? 0 : 8.w),
             child: _buildFilterButton(filter),
           ),
         );
@@ -43,10 +41,7 @@ class FilterButtonsWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected ? const Color(0xFFFF914D) : const Color(0xFFF3F4F6),
           borderRadius: BorderRadius.circular(8.r),
-          border: Border.all(
-            color: const Color(0xFFE5E7EB),
-            width: 1,
-          ),
+          border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
         ),
         child: Center(
           child: Text(
@@ -65,4 +60,3 @@ class FilterButtonsWidget extends StatelessWidget {
     );
   }
 }
-

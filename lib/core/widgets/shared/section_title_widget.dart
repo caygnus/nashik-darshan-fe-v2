@@ -7,10 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 class SectionTitleWidget extends StatelessWidget {
   final String title;
 
-  const SectionTitleWidget({
-    super.key,
-    required this.title,
-  });
+  const SectionTitleWidget({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -24,4 +21,3 @@ class SectionTitleWidget extends StatelessWidget {
     );
   }
 }
-

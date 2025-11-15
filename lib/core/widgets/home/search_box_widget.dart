@@ -15,10 +15,7 @@ class SearchBoxWidget extends StatelessWidget {
         height: 60.h,
         decoration: BoxDecoration(
           gradient: const LinearGradient(
-            colors: [
-              Color(0xFFFFA201),
-              Color(0xFFEF4444),
-            ],
+            colors: [Color(0xFFFFA201), Color(0xFFEF4444)],
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
           ),
@@ -33,11 +30,7 @@ class SearchBoxWidget extends StatelessWidget {
           child: Row(
             children: [
               SizedBox(width: 16.w),
-              Icon(
-                Icons.search,
-                color: const Color(0xFF9CA3AF),
-                size: 24.sp,
-              ),
+              Icon(Icons.search, color: const Color(0xFF9CA3AF), size: 24.sp),
               SizedBox(width: 12.w),
               Expanded(
                 child: TextField(
@@ -71,4 +64,3 @@ class SearchBoxWidget extends StatelessWidget {
     );
   }
 }
-

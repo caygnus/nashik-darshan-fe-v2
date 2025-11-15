@@ -124,4 +124,3 @@ class TravelServiceCard extends StatelessWidget {
     );
   }
 }
-

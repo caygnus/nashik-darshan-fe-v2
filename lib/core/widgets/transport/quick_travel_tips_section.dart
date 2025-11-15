@@ -34,10 +34,7 @@ class QuickTravelTipsSection extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16.r),
-              border: Border.all(
-                color: const Color(0xFFE5E7EB),
-                width: 1,
-              ),
+              border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -67,4 +64,3 @@ class QuickTravelTipsSection extends StatelessWidget {
     );
   }
 }
-

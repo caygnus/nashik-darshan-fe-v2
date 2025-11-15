@@ -8,11 +8,7 @@ class SearchBarWidget extends StatelessWidget {
   final String hintText;
   final VoidCallback? onFilterTap;
 
-  const SearchBarWidget({
-    super.key,
-    required this.hintText,
-    this.onFilterTap,
-  });
+  const SearchBarWidget({super.key, required this.hintText, this.onFilterTap});
 
   @override
   Widget build(BuildContext context) {
@@ -23,19 +19,12 @@ class SearchBarWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(
-          color: const Color(0xFFE5E7EB),
-          width: 1,
-        ),
+        border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
       ),
       child: Row(
         children: [
           // Search Icon
-          Icon(
-            Icons.search,
-            color: const Color(0xFF9CA3AF),
-            size: 20.sp,
-          ),
+          Icon(Icons.search, color: const Color(0xFF9CA3AF), size: 20.sp),
           SizedBox(width: 12.w),
           // Search Input
           Expanded(
@@ -77,4 +66,3 @@ class SearchBarWidget extends StatelessWidget {
     );
   }
 }
-

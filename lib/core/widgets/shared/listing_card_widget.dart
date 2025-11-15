@@ -78,7 +78,10 @@ class ListingCardWidget extends StatelessWidget {
                 top: 12.h,
                 left: 12.w,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12.w,
+                    vertical: 6.h,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(9999.r),
@@ -112,7 +115,7 @@ class ListingCardWidget extends StatelessWidget {
                     ),
                     child: Icon(
                       isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: isFavorite 
+                      color: isFavorite
                           ? const Color(0xFFFF6B35)
                           : const Color(0xFF4B5563),
                       size: 20.sp,
@@ -144,7 +147,10 @@ class ListingCardWidget extends StatelessWidget {
                     ),
                     SizedBox(width: 8.w),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 8.w,
+                        vertical: 4.h,
+                      ),
                       decoration: BoxDecoration(
                         color: ratingColor,
                         borderRadius: BorderRadius.circular(8.r),
@@ -152,11 +158,7 @@ class ListingCardWidget extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
-                            Icons.star,
-                            color: Colors.white,
-                            size: 14.sp,
-                          ),
+                          Icon(Icons.star, color: Colors.white, size: 14.sp),
                           SizedBox(width: 4.w),
                           Text(
                             rating,
@@ -278,4 +280,3 @@ class ListingCardWidget extends StatelessWidget {
     );
   }
 }
-

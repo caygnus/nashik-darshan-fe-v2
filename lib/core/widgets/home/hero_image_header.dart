@@ -78,4 +78,3 @@ class HeroImageHeader extends StatelessWidget {
     );
   }
 }
-

@@ -109,11 +109,7 @@ class UserReviewCardWidget extends StatelessWidget {
           Row(
             children: [
               // Rating Star
-              Icon(
-                Icons.star,
-                color: const Color(0xFFFFA201),
-                size: 16.sp,
-              ),
+              Icon(Icons.star, color: const Color(0xFFFFA201), size: 16.sp),
               SizedBox(width: 4.w),
               // Rating and Reviews
               Text(
@@ -144,4 +140,3 @@ class UserReviewCardWidget extends StatelessWidget {
     );
   }
 }
-

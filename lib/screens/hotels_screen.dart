@@ -57,7 +57,7 @@ class _HotelsScreenState extends State<HotelsScreen> {
                 },
               ),
               SizedBox(height: 16.h),
-              
+
               // Category Selection
               CategorySelectionWidget(
                 categories: const ['Restaurants', 'Hotels', 'Street Food'],
@@ -69,10 +69,14 @@ class _HotelsScreenState extends State<HotelsScreen> {
                 },
               ),
               SizedBox(height: 16.h),
-              
+
               // Filter Buttons
               FilterButtonsWidget(
-                filters: const ['All Hotels', 'Near Temples', 'Spiritual Stays'],
+                filters: const [
+                  'All Hotels',
+                  'Near Temples',
+                  'Spiritual Stays',
+                ],
                 selectedFilter: selectedFilter,
                 onFilterSelected: (filter) {
                   setState(() {
@@ -81,18 +85,15 @@ class _HotelsScreenState extends State<HotelsScreen> {
                 },
               ),
               SizedBox(height: 12.h),
-              
+
               // Result Count
-              const ResultCountWidget(
-                count: 85,
-                itemType: 'Hotels',
-              ),
+              const ResultCountWidget(count: 85, itemType: 'Hotels'),
               SizedBox(height: 16.h),
-              
+
               // Festival Alert Box
               _buildFestivalAlertBox(),
               SizedBox(height: 16.h),
-              
+
               // Hotel Cards
               HotelCardWidget(
                 imagePath: 'assets/images/home-hero.png',
@@ -115,7 +116,7 @@ class _HotelsScreenState extends State<HotelsScreen> {
                 },
               ),
               SizedBox(height: 16.h),
-              
+
               HotelCardWidget(
                 imagePath: 'assets/images/home-hero.png',
                 name: 'Hotel Panchavati',
@@ -137,7 +138,7 @@ class _HotelsScreenState extends State<HotelsScreen> {
                 },
               ),
               SizedBox(height: 16.h),
-              
+
               HotelCardWidget(
                 imagePath: 'assets/images/home-hero.png',
                 name: 'Express Inn',
@@ -159,7 +160,7 @@ class _HotelsScreenState extends State<HotelsScreen> {
                 },
               ),
               SizedBox(height: 20.h),
-              
+
               // View All Button
               ViewAllButtonWidget(
                 onTap: () {
@@ -167,18 +168,19 @@ class _HotelsScreenState extends State<HotelsScreen> {
                 },
               ),
               SizedBox(height: 24.h),
-              
+
               // Popular from Users Section
               const SectionTitleWidget(title: 'Popular from Users'),
               SizedBox(height: 16.h),
-              
+
               // User Review Cards
               UserReviewCardWidget(
                 profileImage: 'assets/images/home-hero.png',
                 name: 'Rajesh Kumar',
                 city: 'Delhi',
                 planTitle: 'Family Weekend Getaway',
-                planDescription: 'Perfect 2-day stay with family near all major attractions',
+                planDescription:
+                    'Perfect 2-day stay with family near all major attractions',
                 rating: '4.7',
                 reviewCount: '89',
                 onUsePlanTap: () {
@@ -186,13 +188,14 @@ class _HotelsScreenState extends State<HotelsScreen> {
                 },
               ),
               SizedBox(height: 16.h),
-              
+
               UserReviewCardWidget(
                 profileImage: 'assets/images/home-hero.png',
                 name: 'Anita Desai',
                 city: 'Pune',
                 planTitle: 'Peaceful Pilgrimage Stay',
-                planDescription: 'Comfortable accommodation near temples for spiritual journey',
+                planDescription:
+                    'Comfortable accommodation near temples for spiritual journey',
                 rating: '4.9',
                 reviewCount: '156',
                 onUsePlanTap: () {
@@ -212,10 +215,7 @@ class _HotelsScreenState extends State<HotelsScreen> {
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [
-            Color(0xFFFF944D),
-            Color(0xFFFFB247),
-          ],
+          colors: [Color(0xFFFF944D), Color(0xFFFFB247)],
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),
@@ -240,12 +240,7 @@ class _HotelsScreenState extends State<HotelsScreen> {
                         height: 28 / 18,
                       ),
                     ),
-                    Text(
-                      '🪔',
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                      ),
-                    ),
+                    Text('🪔', style: TextStyle(fontSize: 18.sp)),
                   ],
                 ),
                 SizedBox(height: 2.h),
@@ -269,15 +264,10 @@ class _HotelsScreenState extends State<HotelsScreen> {
               color: Colors.white.withOpacity(0.3),
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              Icons.calendar_today,
-              color: Colors.white,
-              size: 22.sp,
-            ),
+            child: Icon(Icons.calendar_today, color: Colors.white, size: 22.sp),
           ),
         ],
       ),
     );
   }
 }
-

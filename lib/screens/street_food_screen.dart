@@ -58,7 +58,7 @@ class _StreetFoodScreenState extends State<StreetFoodScreen> {
                 },
               ),
               SizedBox(height: 16.h),
-              
+
               // Category Selection
               CategorySelectionWidget(
                 categories: const ['Street Food', 'Chaat', 'Snacks'],
@@ -70,7 +70,7 @@ class _StreetFoodScreenState extends State<StreetFoodScreen> {
                 },
               ),
               SizedBox(height: 16.h),
-              
+
               // Filter Buttons
               FilterButtonsWidget(
                 filters: const ['All', 'Veg Only', 'Spicy', 'Popular'],
@@ -82,14 +82,14 @@ class _StreetFoodScreenState extends State<StreetFoodScreen> {
                 },
               ),
               SizedBox(height: 12.h),
-              
+
               // Result Count
               const ResultCountWidget(
                 count: 125,
                 itemType: 'Street Food Stalls',
               ),
               SizedBox(height: 16.h),
-              
+
               // Promotional Box
               const PromotionalBoxWidget(
                 heading: 'Must Try!',
@@ -97,7 +97,7 @@ class _StreetFoodScreenState extends State<StreetFoodScreen> {
                 iconPath: 'assets/svg/spoun.svg',
               ),
               SizedBox(height: 16.h),
-              
+
               // Street Food Cards
               ListingCardWidget(
                 imagePath: 'assets/images/home-hero.png',
@@ -106,7 +106,8 @@ class _StreetFoodScreenState extends State<StreetFoodScreen> {
                 rating: '4.7',
                 ratingColor: const Color(0xFF22C55E),
                 type: 'Street Food • Misal Specialist',
-                description: 'Authentic Nashik-style spicy misal pav with farsan and lemon',
+                description:
+                    'Authentic Nashik-style spicy misal pav with farsan and lemon',
                 price: '60',
                 location: 'Old CBS Road',
                 feature: 'Must Try',
@@ -117,7 +118,7 @@ class _StreetFoodScreenState extends State<StreetFoodScreen> {
                 },
               ),
               SizedBox(height: 16.h),
-              
+
               ListingCardWidget(
                 imagePath: 'assets/images/home-hero.png',
                 category: 'Local Favorite',
@@ -125,7 +126,8 @@ class _StreetFoodScreenState extends State<StreetFoodScreen> {
                 rating: '4.5',
                 ratingColor: const Color(0xFF22C55E),
                 type: 'Street Food • Vada Specialist',
-                description: 'Crispy sabudana vada with special green chutney, perfect for fasting',
+                description:
+                    'Crispy sabudana vada with special green chutney, perfect for fasting',
                 price: '40',
                 location: 'Panchavati Area',
                 feature: 'Fasting Food',
@@ -136,7 +138,7 @@ class _StreetFoodScreenState extends State<StreetFoodScreen> {
                 },
               ),
               SizedBox(height: 16.h),
-              
+
               ListingCardWidget(
                 imagePath: 'assets/images/home-hero.png',
                 category: 'Chaat Special',
@@ -144,7 +146,8 @@ class _StreetFoodScreenState extends State<StreetFoodScreen> {
                 rating: '4.6',
                 ratingColor: const Color(0xFF22C55E),
                 type: 'Chaat • Multiple Varieties',
-                description: 'Delicious pani puri, sev puri, and dahi puri with authentic taste',
+                description:
+                    'Delicious pani puri, sev puri, and dahi puri with authentic taste',
                 price: '50',
                 location: 'Mahatma Nagar',
                 feature: 'Hygienic',
@@ -155,7 +158,7 @@ class _StreetFoodScreenState extends State<StreetFoodScreen> {
                 },
               ),
               SizedBox(height: 16.h),
-              
+
               ListingCardWidget(
                 imagePath: 'assets/images/home-hero.png',
                 category: 'Popular Choice',
@@ -163,7 +166,8 @@ class _StreetFoodScreenState extends State<StreetFoodScreen> {
                 rating: '4.4',
                 ratingColor: const Color(0xFF22C55E),
                 type: 'Street Food • Vada Pav',
-                description: 'Hot and crispy batata vada with spicy chutney and garlic powder',
+                description:
+                    'Hot and crispy batata vada with spicy chutney and garlic powder',
                 price: '25',
                 location: 'College Road',
                 feature: 'Quick Bite',
@@ -174,7 +178,7 @@ class _StreetFoodScreenState extends State<StreetFoodScreen> {
                 },
               ),
               SizedBox(height: 20.h),
-              
+
               // View All Button
               ViewAllButtonWidget(
                 onTap: () {
@@ -182,18 +186,19 @@ class _StreetFoodScreenState extends State<StreetFoodScreen> {
                 },
               ),
               SizedBox(height: 24.h),
-              
+
               // Popular from Users Section
               const SectionTitleWidget(title: 'Popular from Users'),
               SizedBox(height: 16.h),
-              
+
               // User Review Cards
               UserReviewCardWidget(
                 profileImage: 'assets/images/home-hero.png',
                 name: 'Sneha Patil',
                 city: 'Nashik',
                 planTitle: 'Street Food Trail',
-                planDescription: 'Complete guide to best street food spots in old city area',
+                planDescription:
+                    'Complete guide to best street food spots in old city area',
                 rating: '4.9',
                 reviewCount: '215',
                 onUsePlanTap: () {
@@ -201,13 +206,14 @@ class _StreetFoodScreenState extends State<StreetFoodScreen> {
                 },
               ),
               SizedBox(height: 16.h),
-              
+
               UserReviewCardWidget(
                 profileImage: 'assets/images/home-hero.png',
                 name: 'Amit Joshi',
                 city: 'Pune',
                 planTitle: 'Evening Snacks Tour',
-                planDescription: 'Perfect evening route covering 5 famous food stalls',
+                planDescription:
+                    'Perfect evening route covering 5 famous food stalls',
                 rating: '4.8',
                 reviewCount: '178',
                 onUsePlanTap: () {
@@ -221,4 +227,3 @@ class _StreetFoodScreenState extends State<StreetFoodScreen> {
     );
   }
 }
-

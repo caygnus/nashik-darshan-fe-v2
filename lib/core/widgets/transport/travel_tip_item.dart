@@ -30,11 +30,7 @@ class TravelTipItem extends StatelessWidget {
             shape: BoxShape.circle,
           ),
           child: Center(
-            child: Icon(
-              icon,
-              color: const Color(0xFFFFA201),
-              size: 20.sp,
-            ),
+            child: Icon(icon, color: const Color(0xFFFFA201), size: 20.sp),
           ),
         ),
         SizedBox(width: 12.w),
@@ -70,4 +66,3 @@ class TravelTipItem extends StatelessWidget {
     );
   }
 }
-

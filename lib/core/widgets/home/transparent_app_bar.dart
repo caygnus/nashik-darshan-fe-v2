@@ -17,10 +17,7 @@ class TransparentAppBarWidget extends StatelessWidget {
         elevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(
-              Icons.notifications_outlined,
-              color: Colors.white,
-            ),
+            icon: const Icon(Icons.notifications_outlined, color: Colors.white),
             onPressed: () {
               // Handle bell icon press
             },
@@ -31,4 +28,3 @@ class TransparentAppBarWidget extends StatelessWidget {
     );
   }
 }
-

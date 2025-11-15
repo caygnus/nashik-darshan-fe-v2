@@ -36,7 +36,7 @@ class _PopularInNashikSectionState extends State<PopularInNashikSection> {
     final double cardWidth = 167.w + 12.w; // card width + spacing
     final double offset = _scrollController.offset;
     final int newPage = (offset / cardWidth).round();
-    
+
     if (newPage != _currentPage && newPage >= 0 && newPage < _totalCards) {
       setState(() {
         _currentPage = newPage;
@@ -137,4 +137,3 @@ class _PopularInNashikSectionState extends State<PopularInNashikSection> {
     );
   }
 }
-

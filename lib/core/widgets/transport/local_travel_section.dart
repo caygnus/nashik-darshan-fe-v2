@@ -50,4 +50,3 @@ class LocalTravelSection extends StatelessWidget {
     );
   }
 }
-

@@ -113,7 +113,7 @@ class HotelCardWidget extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 8.h),
-                
+
                 // Rating Section
                 Row(
                   children: [
@@ -122,7 +122,9 @@ class HotelCardWidget extends StatelessWidget {
                       return Icon(
                         index < rating.floor()
                             ? Icons.star
-                            : (index < rating ? Icons.star_half : Icons.star_border),
+                            : (index < rating
+                                  ? Icons.star_half
+                                  : Icons.star_border),
                         color: const Color(0xFFFFA201),
                         size: 16.sp,
                       );
@@ -140,7 +142,7 @@ class HotelCardWidget extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 8.h),
-                
+
                 // Location Row
                 Row(
                   children: [
@@ -163,7 +165,7 @@ class HotelCardWidget extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 8.h),
-                
+
                 // Nearby Info Box
                 Container(
                   width: 237.w,
@@ -186,7 +188,7 @@ class HotelCardWidget extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 12.h),
-                
+
                 // Amenities Row
                 Wrap(
                   spacing: 16.w,
@@ -216,7 +218,7 @@ class HotelCardWidget extends StatelessWidget {
                     },
                   ),
                 ),
-                
+
                 // Deal Box (if available)
                 if (dealText != null) ...[
                   SizedBox(height: 12.h),
@@ -286,4 +288,3 @@ class HotelCardWidget extends StatelessWidget {
     );
   }
 }
-

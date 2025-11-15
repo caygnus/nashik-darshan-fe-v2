@@ -18,18 +18,12 @@ class SpiritualStoryCard extends StatelessWidget {
         padding: EdgeInsets.all(12.w),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
-            colors: [
-              Color(0xFFFFBA8E),
-              Color(0xFFFEFCE8),
-            ],
+            colors: [Color(0xFFFFBA8E), Color(0xFFFEFCE8)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
           borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(
-            color: const Color(0xFFFF6B35),
-            width: 2,
-          ),
+          border: Border.all(color: const Color(0xFFFF6B35), width: 2),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,10 +83,7 @@ class SpiritualStoryCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFFFFF).withOpacity(0.6),
                   borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(
-                    color: const Color(0xFFE5E7EB),
-                    width: 1,
-                  ),
+                  border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,4 +134,3 @@ class SpiritualStoryCard extends StatelessWidget {
     );
   }
 }
-

@@ -118,10 +118,7 @@ class _PlanMyJourneySectionState extends State<PlanMyJourneySection> {
           height: 37.h,
           decoration: BoxDecoration(
             color: isSelected ? const Color(0xFF667EEA) : Colors.white,
-            border: Border.all(
-              color: const Color(0xFFE5E7EB),
-              width: 1,
-            ),
+            border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
             borderRadius: BorderRadius.circular(9999.r),
           ),
           alignment: Alignment.center,
@@ -153,10 +150,7 @@ class _PlanMyJourneySectionState extends State<PlanMyJourneySection> {
           height: 37.h,
           decoration: BoxDecoration(
             color: isSelected ? const Color(0xFF667EEA) : Colors.white,
-            border: Border.all(
-              color: const Color(0xFFE5E7EB),
-              width: 1,
-            ),
+            border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
             borderRadius: BorderRadius.circular(9999.r),
           ),
           alignment: Alignment.center,
@@ -193,10 +187,7 @@ class _PlanMyJourneySectionState extends State<PlanMyJourneySection> {
         decoration: BoxDecoration(
           gradient: isSelected
               ? const LinearGradient(
-                  colors: [
-                    Color(0xFFFF934D),
-                    Color(0xFFFFB247),
-                  ],
+                  colors: [Color(0xFFFF934D), Color(0xFFFFB247)],
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                 )
@@ -236,4 +227,3 @@ class _PlanMyJourneySectionState extends State<PlanMyJourneySection> {
     );
   }
 }
-

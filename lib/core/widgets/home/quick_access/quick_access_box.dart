@@ -45,34 +45,33 @@ class QuickAccessBox extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-          // SVG Icon
-          SvgPicture.asset(
-            iconPath,
-            width: 28.w,
-            height: 28.h,
-            colorFilter: const ColorFilter.mode(
-              Color(0xFFFFA201),
-              BlendMode.srcIn,
+            // SVG Icon
+            SvgPicture.asset(
+              iconPath,
+              width: 28.w,
+              height: 28.h,
+              colorFilter: const ColorFilter.mode(
+                Color(0xFFFFA201),
+                BlendMode.srcIn,
+              ),
             ),
-          ),
-          SizedBox(height: 6.h),
-          // Label
-          Text(
-            label,
-            style: GoogleFonts.montserrat(
-              fontSize: 12.sp,
-              fontWeight: FontWeight.normal,
-              color: const Color(0xFF000000),
-              height: 1.2,
+            SizedBox(height: 6.h),
+            // Label
+            Text(
+              label,
+              style: GoogleFonts.montserrat(
+                fontSize: 12.sp,
+                fontWeight: FontWeight.normal,
+                color: const Color(0xFF000000),
+                height: 1.2,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
+          ],
+        ),
       ),
     );
   }
 }
-
