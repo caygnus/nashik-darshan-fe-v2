@@ -1,11 +1,11 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:nashik/core/env/config.dart';
+import 'package:nashik/core/infrastructure/env/config.dart';
 import 'package:nashik/core/error/exceptions/app_exception.dart';
 import 'package:nashik/core/error/exceptions/network_exception.dart';
 import 'package:nashik/core/error/exceptions/server_exception.dart';
-import 'package:nashik/core/supabase/config.dart';
+import 'package:nashik/core/infrastructure/supabase/config.dart';
 
 /// Optimized DioClient with comprehensive error handling and interceptors
 class DioClient {

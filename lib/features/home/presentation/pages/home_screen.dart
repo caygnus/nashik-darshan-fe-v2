@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 // Home Screen Widgets
-import 'package:nashik/core/widgets/home/hero_image_header.dart';
-import 'package:nashik/core/widgets/home/plan_journey/plan_my_journey_section.dart';
-import 'package:nashik/core/widgets/home/popular_places/popular_in_nashik_section.dart';
-import 'package:nashik/core/widgets/home/quick_access/quick_access_section.dart';
-import 'package:nashik/core/widgets/home/search_box_widget.dart';
-import 'package:nashik/core/widgets/home/spiritual_experiences/spiritual_experiences_section.dart';
-import 'package:nashik/core/widgets/home/spiritual_story/spiritual_story_card.dart';
-import 'package:nashik/core/widgets/home/transparent_app_bar.dart';
-import 'package:nashik/core/widgets/home/travel_services/travel_services_section.dart';
-import 'package:nashik/screens/eatery_screen.dart';
-import 'package:nashik/screens/hotels_screen.dart';
-import 'package:nashik/screens/street_food_screen.dart';
-import 'package:nashik/screens/transport_screen.dart';
+import 'package:nashik/features/home/presentation/widgets/hero_image_header.dart';
+import 'package:nashik/features/home/presentation/widgets/plan_journey/plan_my_journey_section.dart';
+import 'package:nashik/features/home/presentation/widgets/popular_places/popular_in_nashik_section.dart';
+import 'package:nashik/features/home/presentation/widgets/quick_access/quick_access_section.dart';
+import 'package:nashik/features/home/presentation/widgets/search_box_widget.dart';
+import 'package:nashik/features/home/presentation/widgets/spiritual_experiences/spiritual_experiences_section.dart';
+import 'package:nashik/features/home/presentation/widgets/spiritual_story/spiritual_story_card.dart';
+import 'package:nashik/features/home/presentation/widgets/transparent_app_bar.dart';
+import 'package:nashik/features/home/presentation/widgets/travel_services/travel_services_section.dart';
+import 'package:nashik/features/eatery/presentation/pages/eatery_screen.dart';
+import 'package:nashik/features/hotels/presentation/pages/hotels_screen.dart';
+import 'package:nashik/features/street_food/presentation/pages/street_food_screen.dart';
+import 'package:nashik/features/transport/presentation/pages/transport_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

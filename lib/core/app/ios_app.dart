@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:nashik/screens/home_screen.dart';
+import 'package:nashik/features/home/presentation/pages/home_screen.dart';
 // import 'package:nashik_darshan/core/router/app_router.dart';
 
 class IosApp extends StatelessWidget {

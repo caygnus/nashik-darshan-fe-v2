@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nashik/core/widgets/shared/category_selection_widget.dart';
-import 'package:nashik/core/widgets/shared/filter_buttons_widget.dart';
-import 'package:nashik/core/widgets/shared/hotel_card_widget.dart';
-import 'package:nashik/core/widgets/shared/result_count_widget.dart';
-import 'package:nashik/core/widgets/shared/search_bar_widget.dart';
-import 'package:nashik/core/widgets/shared/section_title_widget.dart';
-import 'package:nashik/core/widgets/shared/user_review_card_widget.dart';
-import 'package:nashik/core/widgets/shared/view_all_button_widget.dart';
+import 'package:nashik/core/widgets/category_selection_widget.dart';
+import 'package:nashik/core/widgets/filter_buttons_widget.dart';
+import 'package:nashik/core/widgets/hotel_card_widget.dart';
+import 'package:nashik/core/widgets/result_count_widget.dart';
+import 'package:nashik/core/widgets/search_bar_widget.dart';
+import 'package:nashik/core/widgets/section_title_widget.dart';
+import 'package:nashik/core/widgets/user_review_card_widget.dart';
+import 'package:nashik/core/widgets/view_all_button_widget.dart';
 
 /// Hotels Screen
 /// Displays hotels and accommodation options in Nashik

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nashik/core/widgets/transport/city_to_city_travel_section.dart';
-import 'package:nashik/core/widgets/transport/local_travel_section.dart';
-import 'package:nashik/core/widgets/transport/quick_travel_tips_section.dart';
+import 'package:nashik/features/transport/presentation/widgets/city_to_city_travel_section.dart';
+import 'package:nashik/features/transport/presentation/widgets/local_travel_section.dart';
+import 'package:nashik/features/transport/presentation/widgets/quick_travel_tips_section.dart';
 // Transport Screen Widgets
-import 'package:nashik/core/widgets/transport/transport_hero_image_section.dart';
+import 'package:nashik/features/transport/presentation/widgets/transport_hero_image_section.dart';
 
 /// Transport Screen
 /// Displays transport options and services in Nashik
