@@ -51,3 +51,6 @@ app.*.map.json
 
 # Keystore files
 **/key.properties
+
+# Environment variables
+.env
