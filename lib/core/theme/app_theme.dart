@@ -3,11 +3,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nashik/core/theme/colors.dart';
 
 class AppTheme {
-  static _border({Color color = AppColors.primary, double width = 1}) =>
-      OutlineInputBorder(
-        borderSide: BorderSide(color: color, width: width),
-        borderRadius: BorderRadius.circular(10),
-      );
+  static OutlineInputBorder _border({
+    Color color = AppColors.primary,
+    double width = 1,
+  }) => OutlineInputBorder(
+    borderSide: BorderSide(color: color, width: width),
+    borderRadius: BorderRadius.circular(10),
+  );
 
   static final lightTheme = ThemeData().copyWith(
     appBarTheme: const AppBarTheme(backgroundColor: Color(0xfffff8f4)),

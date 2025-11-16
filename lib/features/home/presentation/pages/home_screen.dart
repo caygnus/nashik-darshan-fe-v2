@@ -51,7 +51,7 @@ class HomeScreen extends StatelessWidget {
                   onDiscoverTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
+                      MaterialPageRoute<void>(
                         builder: (context) => const StreetFoodScreen(),
                       ),
                     );
@@ -59,7 +59,7 @@ class HomeScreen extends StatelessWidget {
                   onTransportTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
+                      MaterialPageRoute<void>(
                         builder: (context) => const TransportScreen(),
                       ),
                     );
@@ -67,7 +67,7 @@ class HomeScreen extends StatelessWidget {
                   onHotelsTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
+                      MaterialPageRoute<void>(
                         builder: (context) => const HotelsScreen(),
                       ),
                     );
@@ -75,7 +75,7 @@ class HomeScreen extends StatelessWidget {
                   onEateryTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
+                      MaterialPageRoute<void>(
                         builder: (context) => const EateryScreen(),
                       ),
                     );

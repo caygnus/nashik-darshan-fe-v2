@@ -6,11 +6,11 @@ import 'package:icons_plus/icons_plus.dart';
 import 'package:nashik/core/theme/colors.dart';
 
 class BottomBarPage extends StatelessWidget {
+
+  const BottomBarPage({super.key, required this.shell});
   static const routeName = 'BottomBarPage';
   static const routePath = '/BottomBarPage';
   final StatefulNavigationShell shell;
-
-  const BottomBarPage({super.key, required this.shell});
 
   @override
   Widget build(BuildContext context) {

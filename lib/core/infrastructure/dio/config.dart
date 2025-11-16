@@ -1,18 +1,16 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:nashik/core/infrastructure/env/config.dart';
 import 'package:nashik/core/error/exceptions/app_exception.dart';
 import 'package:nashik/core/error/exceptions/network_exception.dart';
 import 'package:nashik/core/error/exceptions/server_exception.dart';
+import 'package:nashik/core/infrastructure/env/config.dart';
 import 'package:nashik/core/infrastructure/supabase/config.dart';
 
 /// Optimized DioClient with comprehensive error handling and interceptors
 class DioClient {
-  final Dio _dio;
-
   DioClient({
-    String? baseUrl,
+    final String? baseUrl,
     Duration? connectTimeout,
     Duration? receiveTimeout,
     Duration? sendTimeout,
@@ -35,6 +33,7 @@ class DioClient {
        ) {
     _setupInterceptors();
   }
+  final Dio _dio;
 
   /// Setup all interceptors
   void _setupInterceptors() {
@@ -81,7 +80,7 @@ class DioClient {
   /// POST request
   Future<Response<T>> post<T>(
     String endpoint, {
-    dynamic data,
+    final data,
     Map<String, dynamic>? queryParameters,
     Options? options,
     CancelToken? cancelToken,
@@ -265,13 +264,8 @@ class DioClient {
     }
   }
 
-  /// Update base URL dynamically
-  void updateBaseUrl(String baseUrl) {
-    _dio.options.baseUrl = baseUrl;
-  }
-
   /// Update default headers
-  void updateHeaders(Map<String, dynamic> headers) {
+  void updateHeaders(final Map<String, dynamic> headers) {
     _dio.options.headers.addAll(headers);
   }
 
@@ -281,7 +275,7 @@ class DioClient {
   }
 
   /// Set authentication token manually
-  void setAuthToken(String token) {
+  void setAuthToken(final String token) {
     _dio.options.headers['Authorization'] = 'Bearer $token';
   }
 
@@ -294,7 +288,10 @@ class DioClient {
 /// Logging interceptor for request/response logging
 class _LoggingInterceptor extends Interceptor {
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+  void onRequest(
+    final RequestOptions options,
+    final RequestInterceptorHandler handler,
+  ) {
     log('┌─────────────────────────────────────────────────────────────');
     log('│ REQUEST: ${options.method} ${options.uri}');
     log('│ Headers: ${options.headers}');
@@ -309,7 +306,10 @@ class _LoggingInterceptor extends Interceptor {
   }
 
   @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
+  void onResponse(
+    final Response response,
+    final ResponseInterceptorHandler handler,
+  ) {
     log('┌─────────────────────────────────────────────────────────────');
     log('│ RESPONSE: ${response.statusCode} ${response.requestOptions.uri}');
     log('│ Data: ${response.data}');
@@ -318,7 +318,7 @@ class _LoggingInterceptor extends Interceptor {
   }
 
   @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
+  void onError(DioException err, final ErrorInterceptorHandler handler) {
     log('┌─────────────────────────────────────────────────────────────');
     log('│ ERROR: ${err.type}');
     log('│ ${err.requestOptions.method} ${err.requestOptions.uri}');
@@ -338,8 +338,8 @@ class _AuthInterceptor extends Interceptor {
 
   @override
   Future<void> onRequest(
-    RequestOptions options,
-    RequestInterceptorHandler handler,
+    final RequestOptions options,
+    final RequestInterceptorHandler handler,
   ) async {
     try {
       // Get Supabase client instance from global config
@@ -361,12 +361,12 @@ class _AuthInterceptor extends Interceptor {
 /// Error interceptor for handling common error scenarios
 class _ErrorInterceptor extends Interceptor {
   @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
+  void onError(DioException err, final ErrorInterceptorHandler handler) {
     // Handle 401 Unauthorized - token might be expired
     if (err.response?.statusCode == 401) {
       log('Unauthorized access - token may be expired or invalid');
       // Sign out asynchronously without blocking error handling
-      SupabaseConfig.client.auth.signOut().catchError((e) {
+      SupabaseConfig.client.auth.signOut().catchError((final e) {
         log('Error signing out from Supabase: $e');
       });
     }
