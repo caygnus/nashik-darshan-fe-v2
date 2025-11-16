@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nashik/widgets/category_selection_widget.dart';
 import 'package:nashik/widgets/filter_buttons_widget.dart';
@@ -14,6 +15,9 @@ import 'package:nashik/widgets/view_all_button_widget.dart';
 /// Street Food Screen
 /// Displays street food and local food stalls in Nashik
 class StreetFoodScreen extends StatefulWidget {
+  static const routeName = 'StreetFoodScreen';
+  static const routePath = '/StreetFoodScreen';
+
   const StreetFoodScreen({super.key});
 
   @override
@@ -32,7 +36,7 @@ class _StreetFoodScreenState extends State<StreetFoodScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.pop(),
         ),
         title: Text(
           'Street Food',

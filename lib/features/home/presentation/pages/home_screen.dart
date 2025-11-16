@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nashik/features/eatery/presentation/pages/eatery_screen.dart';
-// Home Screen Widgets
 import 'package:nashik/features/home/presentation/widgets/hero_image_header.dart';
 import 'package:nashik/features/home/presentation/widgets/plan_journey/plan_my_journey_section.dart';
 import 'package:nashik/features/home/presentation/widgets/popular_places/popular_in_nashik_section.dart';
@@ -16,13 +16,12 @@ import 'package:nashik/features/street_food/presentation/pages/street_food_scree
 import 'package:nashik/features/transport/presentation/pages/transport_screen.dart';
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
   static const routeName = 'HomeScreen';
   static const routePath = '/HomeScreen';
 
-  const HomeScreen({super.key});
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
@@ -49,36 +48,16 @@ class HomeScreen extends StatelessWidget {
                 // Quick Access Section
                 QuickAccessSection(
                   onDiscoverTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<void>(
-                        builder: (context) => const StreetFoodScreen(),
-                      ),
-                    );
+                    context.pushNamed(StreetFoodScreen.routeName);
                   },
                   onTransportTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<void>(
-                        builder: (context) => const TransportScreen(),
-                      ),
-                    );
+                    context.pushNamed(TransportScreen.routeName);
                   },
                   onHotelsTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<void>(
-                        builder: (context) => const HotelsScreen(),
-                      ),
-                    );
+                    context.pushNamed(HotelsScreen.routeName);
                   },
                   onEateryTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<void>(
-                        builder: (context) => const EateryScreen(),
-                      ),
-                    );
+                    context.pushNamed(EateryScreen.routeName);
                   },
                 ),
                 // Plan My Journey Section

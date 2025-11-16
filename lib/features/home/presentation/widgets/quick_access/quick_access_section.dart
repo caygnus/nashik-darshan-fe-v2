@@ -7,15 +7,6 @@ import 'quick_access_box.dart';
 /// Quick Access Section Widget
 /// Displays a grid of quick access buttons for various services
 class QuickAccessSection extends StatelessWidget {
-  final VoidCallback? onSpiritualTap;
-  final VoidCallback? onDiscoverTap;
-  final VoidCallback? onTransportTap;
-  final VoidCallback? onRailwaysTap;
-  final VoidCallback? onHotelsTap;
-  final VoidCallback? onEateryTap;
-  final VoidCallback? onFlightsTap;
-  final VoidCallback? onVineyardsTap;
-
   const QuickAccessSection({
     super.key,
     this.onSpiritualTap,
@@ -27,9 +18,17 @@ class QuickAccessSection extends StatelessWidget {
     this.onFlightsTap,
     this.onVineyardsTap,
   });
+  final VoidCallback? onSpiritualTap;
+  final VoidCallback? onDiscoverTap;
+  final VoidCallback? onTransportTap;
+  final VoidCallback? onRailwaysTap;
+  final VoidCallback? onHotelsTap;
+  final VoidCallback? onEateryTap;
+  final VoidCallback? onFlightsTap;
+  final VoidCallback? onVineyardsTap;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Container(
       color: Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
