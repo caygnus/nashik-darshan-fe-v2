@@ -14,6 +14,8 @@ import 'package:nashik/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:nashik/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:nashik/ios_app.dart';
 
+// flutter build apk --release --split-per-abi
+// flutter build appbundle --release
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
