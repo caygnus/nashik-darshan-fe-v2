@@ -167,8 +167,6 @@ String? handleRedirect(BuildContext context, GoRouterState state) {
 
   if (user == null && protectedRoutes.contains(path)) {
     return LoginPage.routePath;
-  } else if (user != null && !protectedRoutes.contains(path)) {
-    return HomeScreen.routePath;
   }
   return null;
 }
