@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nashik/core/auth/google_auth_service.dart';
-import 'package:nashik/core/deep_link/deep_link_service.dart';
 import 'package:nashik/core/router/app_router.dart';
 import 'package:nashik/core/supabase/config.dart';
 import 'package:nashik/features/auth/domain/usecases/get_current_user.dart';
@@ -21,12 +20,6 @@ class AuthCubit extends Cubit<AuthState> {
     required this.getCurrentUser,
   }) : super(const AuthState.initial()) {
     _initializeAuthState();
-    _initializeDeepLinking();
-  }
-
-  void _initializeDeepLinking() {
-    DeepLinkService().initialize();
-    DeepLinkService().getInitialLink();
   }
 
   void _initializeAuthState() {

@@ -245,9 +245,14 @@ String? handleRedirect(BuildContext context, GoRouterState state) {
   final path = uri.path;
   final scheme = uri.scheme;
 
+  debugPrint(
+    '🔍 Redirect check: path=$path, scheme="$scheme", fullUri=${uri.toString()}',
+  );
+
   // Only handle deep links with our custom scheme
   // For normal navigation, scheme will be empty or 'http'/'https', not our custom scheme
   if (scheme.isNotEmpty && scheme == 'com.caygnus.nashikdarshan') {
+    debugPrint('✅ Deep link detected, routing to deep link handler');
     final deepLinkType = DeepLinkType.fromUri(uri);
     return deepLinkType.getRoutePath(uri);
   }
@@ -255,8 +260,10 @@ String? handleRedirect(BuildContext context, GoRouterState state) {
   // Handle protected routes (only for normal app navigation, not deep links)
   final user = SupabaseConfig.client.auth.currentUser;
   if (user == null && protectedRoutes.contains(path)) {
+    debugPrint('🔒 Protected route without auth, redirecting to login');
     return LoginPage.routePath;
   }
 
+  debugPrint('✅ No redirect needed');
   return null;
 }

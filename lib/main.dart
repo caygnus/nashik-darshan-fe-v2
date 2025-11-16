@@ -29,6 +29,9 @@ void main() async {
   // Initialize deep linking
   DeepLinkService().initialize();
 
+  // Process any initial deep link (e.g., app opened via deep link)
+  await DeepLinkService().getInitialLink();
+
   // initialize the go router
   Approuter.init();
 

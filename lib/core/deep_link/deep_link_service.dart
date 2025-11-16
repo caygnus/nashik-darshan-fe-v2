@@ -10,6 +10,7 @@ class DeepLinkService {
 
   final AppLinks _appLinks = AppLinks();
   StreamSubscription<Uri>? _linkSubscription;
+  bool _hasProcessedInitialLink = false;
 
   void initialize() {
     _linkSubscription = _appLinks.uriLinkStream.listen(
@@ -37,9 +38,15 @@ class DeepLinkService {
   }
 
   Future<Uri?> getInitialLink() async {
+    // Only process initial link once at app startup
+    if (_hasProcessedInitialLink) {
+      return null;
+    }
+
     try {
       final uri = await _appLinks.getInitialLink();
       if (uri != null) {
+        _hasProcessedInitialLink = true;
         await _handleDeepLink(uri);
       }
       return uri;
