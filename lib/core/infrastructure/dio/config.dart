@@ -244,14 +244,14 @@ class DioClient {
           code: statusCode?.toString(),
         );
       case DioExceptionType.cancel:
-        return ServerException(
+        return const ServerException(
           message: 'Request was cancelled',
           code: 'REQUEST_CANCELLED',
         );
       case DioExceptionType.connectionError:
         return NetworkException.noInternet();
       case DioExceptionType.badCertificate:
-        return ServerException(
+        return const ServerException(
           message: 'Certificate error. Please contact support.',
           code: 'BAD_CERTIFICATE',
         );
@@ -337,7 +337,7 @@ class _AuthInterceptor extends Interceptor {
   _AuthInterceptor();
 
   @override
-  void onRequest(
+  Future<void> onRequest(
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {

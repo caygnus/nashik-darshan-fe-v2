@@ -8,13 +8,13 @@ class IosApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoApp(
+    return const CupertinoApp(
       title: 'Nashik Darshan',
-      theme: const CupertinoThemeData(
+      theme: CupertinoThemeData(
         applyThemeToAll: true,
         primaryColor: Colors.purple,
       ),
-      home: const HomeScreen(),
+      home: HomeScreen(),
       // TODO: When router is ready, switch back to CupertinoApp.router
       // routerConfig: Approuter.router,
     );
