@@ -9,6 +9,7 @@ import 'package:nashik/features/auth/domain/entities/user.dart';
 import 'package:nashik/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:nashik/features/auth/presentation/cubit/auth_state.dart';
 import 'package:nashik/features/auth/presentation/pages/login_page.dart';
+import 'package:nashik/widgets/app_text.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -23,24 +24,15 @@ class ProfilePage extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.r),
           ),
-          title: Text(
-            'Logout',
-            style: TextStyle(
-              fontSize: 20.sp,
-              fontWeight: FontWeight.bold,
-              color: AppColors.darkText,
-            ),
-          ),
-          content: Text(
-            'Are you sure you want to logout?',
-            style: TextStyle(fontSize: 14.sp, color: AppColors.darkText),
-          ),
+          title: H2('Logout'),
+          content: BodyText('Are you sure you want to logout?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(dialogContext).pop(),
-              child: Text(
+              child: BodyText(
                 'Cancel',
-                style: TextStyle(fontSize: 14.sp, color: AppColors.grey),
+                color: AppColors.grey,
+                fontWeight: FontWeight.w500,
               ),
             ),
             TextButton(
@@ -48,13 +40,10 @@ class ProfilePage extends StatelessWidget {
                 Navigator.of(dialogContext).pop();
                 context.read<AuthCubit>().signOut();
               },
-              child: Text(
+              child: BodyText(
                 'Logout',
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  color: AppColors.red,
-                  fontWeight: FontWeight.w600,
-                ),
+                color: AppColors.red,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],
@@ -96,14 +85,7 @@ class ProfilePage extends StatelessWidget {
                   color: AppColors.darkText,
                   onPressed: () => Navigator.of(context).pop(),
                 ),
-                title: Text(
-                  'Profile',
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.darkText,
-                  ),
-                ),
+                title: H1('Profile'),
                 centerTitle: true,
                 backgroundColor: Colors.white,
                 elevation: 0,
@@ -121,8 +103,8 @@ class ProfilePage extends StatelessWidget {
                     return state.maybeWhen(
                       authenticated: (user) =>
                           _buildProfileContent(context, user),
-                      orElse: () => const Center(
-                        child: Text('Please log in to view your profile'),
+                      orElse: () => Center(
+                        child: BodyText('Please log in to view your profile'),
                       ),
                     );
                   },
@@ -185,8 +167,8 @@ class ProfilePage extends StatelessWidget {
               children: [
                 // Profile Avatar
                 Container(
-                  width: 80.w,
-                  height: 80.w,
+                  width: 72.w,
+                  height: 72.w,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: AppColors.primary.withValues(alpha: 0.1),
@@ -194,33 +176,23 @@ class ProfilePage extends StatelessWidget {
                   ),
                   child: Icon(
                     Icons.person,
-                    size: 40.sp,
+                    size: 36.sp,
                     color: AppColors.primary,
                   ),
                 ),
-                SizedBox(width: 16.w),
+                SizedBox(width: 12.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        user.name,
-                        style: TextStyle(
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.darkText,
-                        ),
-                      ),
-                      SizedBox(height: 4.h),
-                      Text(
+                      H1(user.name, maxLines: 1),
+                      SizedBox(height: 6.h),
+                      BodyText(
                         'Spiritual Explorer',
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w500,
-                        ),
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w600,
                       ),
-                      SizedBox(height: 8.h),
+                      SizedBox(height: 12.h),
                       Row(
                         children: [
                           Container(
@@ -241,23 +213,21 @@ class ProfilePage extends StatelessWidget {
                                   color: Colors.green,
                                 ),
                                 SizedBox(width: 4.w),
-                                Text(
+                                Caption(
                                   'Marathi',
-                                  style: TextStyle(
-                                    fontSize: 12.sp,
-                                    color: Colors.green,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ],
                             ),
                           ),
                           SizedBox(width: 8.w),
-                          Text(
-                            user.phone ?? '+91 98765 43210',
-                            style: TextStyle(
-                              fontSize: 14.sp,
+                          Expanded(
+                            child: BodyText(
+                              user.phone ?? '+91 98765 43210',
                               color: AppColors.grey,
+                              fontWeight: FontWeight.w500,
+                              maxLines: 1,
                             ),
                           ),
                           SizedBox(width: 4.w),
@@ -286,35 +256,36 @@ class ProfilePage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Travel Stats',
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.darkText,
-                  ),
-                ),
+                H2('Travel Stats'),
                 SizedBox(height: 16.h),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _buildStatItem(
-                      icon: Icons.temple_buddhist,
-                      count: templesVisited,
-                      label: 'Temples Visited',
-                      color: AppColors.primary,
+                    Expanded(
+                      child: _buildStatItem(
+                        icon: Icons.temple_buddhist,
+                        count: templesVisited,
+                        label: 'Temples Visited',
+                        color: AppColors.primary,
+                      ),
                     ),
-                    _buildStatItem(
-                      icon: Icons.landscape,
-                      count: spotsExplored,
-                      label: 'Spots Explored',
-                      color: Colors.green,
+                    SizedBox(width: 12.w),
+                    Expanded(
+                      child: _buildStatItem(
+                        icon: Icons.landscape,
+                        count: spotsExplored,
+                        label: 'Spots Explored',
+                        color: Colors.green,
+                      ),
                     ),
-                    _buildStatItem(
-                      icon: Icons.luggage,
-                      count: tripsCompleted,
-                      label: 'Trips Completed',
-                      color: Colors.blue,
+                    SizedBox(width: 12.w),
+                    Expanded(
+                      child: _buildStatItem(
+                        icon: Icons.luggage,
+                        count: tripsCompleted,
+                        label: 'Trips Completed',
+                        color: Colors.blue,
+                      ),
                     ),
                   ],
                 ),
@@ -336,35 +307,32 @@ class ProfilePage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Recent Trips',
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.darkText,
-                      ),
-                    ),
+                    H2('Recent Trips'),
                     TextButton(
                       onPressed: () {},
-                      child: Text(
+                      child: BodyText(
                         'View All',
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 12.h),
-                ...recentTrips.map(
-                  (trip) => _buildTripItem(
-                    name: trip['name'] as String,
-                    date: trip['date'] as String,
-                    icon: trip['image'] as IconData,
-                  ),
-                ),
+                SizedBox(height: 16.h),
+                ...recentTrips.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final trip = entry.value;
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      bottom: index < recentTrips.length - 1 ? 16.h : 0,
+                    ),
+                    child: _buildTripItem(
+                      name: trip['name'] as String,
+                      date: trip['date'] as String,
+                      icon: trip['image'] as IconData,
+                    ),
+                  );
+                }),
               ],
             ),
           ),
@@ -384,43 +352,39 @@ class ProfilePage extends StatelessWidget {
                   height: 56.h,
                   child: ElevatedButton.icon(
                     onPressed: () {},
-                    icon: Icon(Icons.bookmark, color: Colors.white),
-                    label: Text(
-                      '$savedItineraries Saved Itineraries',
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
+                    icon: Icon(
+                      Icons.bookmark,
+                      color: Colors.white,
+                      size: 20.sp,
                     ),
+                    label: ButtonText('$savedItineraries Saved Itineraries'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.purple,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.r),
                       ),
+                      elevation: 0,
                     ),
                   ),
                 ),
-                SizedBox(height: 12.h),
+                SizedBox(height: 16.h),
                 SizedBox(
                   width: double.infinity,
                   height: 56.h,
                   child: ElevatedButton.icon(
                     onPressed: () {},
-                    icon: Icon(Icons.favorite, color: Colors.white),
-                    label: Text(
-                      '$wishlistPlaces Wishlist Places',
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
+                    icon: Icon(
+                      Icons.favorite,
+                      color: Colors.white,
+                      size: 20.sp,
                     ),
+                    label: ButtonText('$wishlistPlaces Wishlist Places'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.pink,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.r),
                       ),
+                      elevation: 0,
                     ),
                   ),
                 ),
@@ -439,14 +403,7 @@ class ProfilePage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Nashik Journey',
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.darkText,
-                  ),
-                ),
+                H2('Nashik Journey'),
                 SizedBox(height: 16.h),
                 _buildJourneyItem(
                   icon: Icons.temple_buddhist,
@@ -499,32 +456,33 @@ class ProfilePage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Achievements',
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.darkText,
-                  ),
-                ),
+                H2('Achievements'),
                 SizedBox(height: 16.h),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _buildAchievementBadge(
-                      icon: Icons.workspace_premium,
-                      label: 'Temple Explorer',
-                      color: Colors.amber,
+                    Expanded(
+                      child: _buildAchievementBadge(
+                        icon: Icons.workspace_premium,
+                        label: 'Temple Explorer',
+                        color: Colors.amber,
+                      ),
                     ),
-                    _buildAchievementBadge(
-                      icon: Icons.restaurant,
-                      label: 'Foodie',
-                      color: AppColors.primary,
+                    SizedBox(width: 12.w),
+                    Expanded(
+                      child: _buildAchievementBadge(
+                        icon: Icons.restaurant,
+                        label: 'Foodie',
+                        color: AppColors.primary,
+                      ),
                     ),
-                    _buildAchievementBadge(
-                      icon: Icons.eco,
-                      label: 'Eco Traveler',
-                      color: Colors.green,
+                    SizedBox(width: 12.w),
+                    Expanded(
+                      child: _buildAchievementBadge(
+                        icon: Icons.eco,
+                        label: 'Eco Traveler',
+                        color: Colors.green,
+                      ),
                     ),
                   ],
                 ),
@@ -543,15 +501,8 @@ class ProfilePage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Settings',
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.darkText,
-                  ),
-                ),
-                SizedBox(height: 12.h),
+                H2('Settings'),
+                SizedBox(height: 16.h),
                 _buildSettingItem(Icons.privacy_tip, 'Privacy Settings'),
                 _buildSettingItem(
                   Icons.language,
@@ -597,33 +548,17 @@ class ProfilePage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Trip Streak',
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      '$tripStreak Days',
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+                    H2('Trip Streak', color: Colors.white),
+                    H2('$tripStreak Days', color: Colors.white),
                   ],
                 ),
-                SizedBox(height: 8.h),
-                Text(
+                SizedBox(height: 10.h),
+                BodyText(
                   'Keep exploring Nashik!',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    color: Colors.white.withValues(alpha: 0.9),
-                  ),
+                  color: Colors.white.withValues(alpha: 0.9),
+                  fontWeight: FontWeight.w500,
                 ),
-                SizedBox(height: 12.h),
+                SizedBox(height: 16.h),
                 Row(
                   children: [
                     Expanded(
@@ -640,13 +575,10 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 12.w),
-                    Text(
+                    BodyText(
                       '${(streakProgress * 100).toInt()}%',
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
                   ],
                 ),
@@ -666,30 +598,25 @@ class ProfilePage extends StatelessWidget {
     required Color color,
   }) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          width: 60.w,
-          height: 60.w,
+          width: 56.w,
+          height: 56.w,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: color.withValues(alpha: 0.1),
           ),
-          child: Icon(icon, color: color, size: 30.sp),
+          child: Icon(icon, color: color, size: 28.sp),
         ),
         SizedBox(height: 8.h),
-        Text(
-          count.toString(),
-          style: TextStyle(
-            fontSize: 20.sp,
-            fontWeight: FontWeight.bold,
-            color: AppColors.darkText,
-          ),
-        ),
+        H1(count.toString(), maxLines: 1, textAlign: TextAlign.center),
         SizedBox(height: 4.h),
-        Text(
+        Caption(
           label,
-          style: TextStyle(fontSize: 12.sp, color: AppColors.grey),
+          fontWeight: FontWeight.w500,
           textAlign: TextAlign.center,
+          maxLines: 2,
         ),
       ],
     );
@@ -700,43 +627,30 @@ class ProfilePage extends StatelessWidget {
     required String date,
     required IconData icon,
   }) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 12.h),
-      child: Row(
-        children: [
-          Container(
-            width: 60.w,
-            height: 60.w,
-            decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-            child: Icon(icon, color: AppColors.primary, size: 30.sp),
+    return Row(
+      children: [
+        Container(
+          width: 56.w,
+          height: 56.w,
+          decoration: BoxDecoration(
+            color: AppColors.primary.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(12.r),
           ),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.darkText,
-                  ),
-                ),
-                SizedBox(height: 4.h),
-                Text(
-                  date,
-                  style: TextStyle(fontSize: 14.sp, color: AppColors.grey),
-                ),
-              ],
-            ),
+          child: Icon(icon, color: AppColors.primary, size: 28.sp),
+        ),
+        SizedBox(width: 12.w),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              H3(name, maxLines: 1),
+              SizedBox(height: 6.h),
+              Subtitle(date),
+            ],
           ),
-          Icon(Icons.chevron_right, color: AppColors.grey),
-        ],
-      ),
+        ),
+        Icon(Icons.chevron_right, color: AppColors.grey, size: 24.sp),
+      ],
     );
   }
 
@@ -760,40 +674,16 @@ class ProfilePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    label,
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.darkText,
-                    ),
-                  ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    subtitle,
-                    style: TextStyle(fontSize: 14.sp, color: AppColors.grey),
-                  ),
+                  H3(label, maxLines: 1),
+                  SizedBox(height: 6.h),
+                  Subtitle(subtitle),
                 ],
               ),
             ),
             if (progress != null && progressText != null)
-              Text(
-                progressText,
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.darkText,
-                ),
-              )
+              BodyText(progressText, fontWeight: FontWeight.bold)
             else if (points != null)
-              Text(
-                points.toString(),
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green,
-                ),
-              )
+              H3(points.toString(), color: Colors.green)
             else if (badges != null)
               Row(
                 children: badges
@@ -834,25 +724,23 @@ class ProfilePage extends StatelessWidget {
     required Color color,
   }) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          width: 70.w,
-          height: 70.w,
+          width: 64.w,
+          height: 64.w,
           decoration: BoxDecoration(
             color: color.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(16.r),
+            borderRadius: BorderRadius.circular(12.r),
           ),
-          child: Icon(icon, color: color, size: 35.sp),
+          child: Icon(icon, color: color, size: 32.sp),
         ),
         SizedBox(height: 8.h),
-        Text(
+        Caption(
           label,
-          style: TextStyle(
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w500,
-            color: AppColors.darkText,
-          ),
+          fontWeight: FontWeight.w600,
           textAlign: TextAlign.center,
+          maxLines: 2,
         ),
       ],
     );
@@ -867,26 +755,19 @@ class ProfilePage extends StatelessWidget {
   }) {
     return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(8.r),
       child: Padding(
-        padding: EdgeInsets.only(bottom: 16.h),
+        padding: EdgeInsets.symmetric(vertical: 12.h),
         child: Row(
           children: [
             Icon(icon, color: textColor ?? AppColors.grey, size: 24.sp),
-            SizedBox(width: 12.w),
-            Expanded(
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  color: textColor ?? AppColors.darkText,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
+            SizedBox(width: 16.w),
+            Expanded(child: H3(title, color: textColor ?? AppColors.darkText)),
             if (subtitle != null)
-              Text(
+              BodyText(
                 subtitle,
-                style: TextStyle(fontSize: 14.sp, color: AppColors.grey),
+                color: AppColors.grey,
+                fontWeight: FontWeight.w500,
               ),
             SizedBox(width: 8.w),
             Icon(Icons.chevron_right, color: AppColors.grey, size: 20.sp),
