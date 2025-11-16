@@ -34,7 +34,7 @@ class AuthCubit extends Cubit<AuthState> {
             _loadCurrentUser();
           }
         } catch (e) {
-          _loadCurrentUser();
+        _loadCurrentUser();
         }
       } else if (event == AuthChangeEvent.signedOut) {
         emit(const AuthState.unauthenticated());
