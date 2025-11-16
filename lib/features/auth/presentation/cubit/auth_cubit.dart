@@ -68,6 +68,30 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  /// Sign up with email and password
+  Future<void> signUpWithEmail({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      emit(AuthLoading());
+      final response = await SupabaseConfig.client.auth.signUp(
+        email: email,
+        password: password,
+      );
+
+      if (response.user != null) {
+        emit(AuthAuthenticated(response.user!.id));
+      } else {
+        emit(const AuthError('Sign up failed. Please try again.'));
+      }
+    } on AuthException catch (e) {
+      emit(AuthError(e.message));
+    } catch (e) {
+      emit(AuthError('An unexpected error occurred: ${e.toString()}'));
+    }
+  }
+
   /// Sign out
   Future<void> signOut() async {
     try {
