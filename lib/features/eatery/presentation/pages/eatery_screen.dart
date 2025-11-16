@@ -14,6 +14,9 @@ import 'package:nashik/widgets/view_all_button_widget.dart';
 /// Eatery Screen
 /// Displays restaurants and food options in Nashik
 class EateryScreen extends StatefulWidget {
+  static const routeName = 'EateryScreen';
+  static const routePath = '/EateryScreen';
+
   const EateryScreen({super.key});
 
   @override

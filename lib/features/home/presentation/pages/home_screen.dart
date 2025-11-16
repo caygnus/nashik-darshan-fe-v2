@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nashik/features/eatery/presentation/pages/eatery_screen.dart';
 // Home Screen Widgets
 import 'package:nashik/features/home/presentation/widgets/hero_image_header.dart';
 import 'package:nashik/features/home/presentation/widgets/plan_journey/plan_my_journey_section.dart';
@@ -10,12 +11,14 @@ import 'package:nashik/features/home/presentation/widgets/spiritual_experiences/
 import 'package:nashik/features/home/presentation/widgets/spiritual_story/spiritual_story_card.dart';
 import 'package:nashik/features/home/presentation/widgets/transparent_app_bar.dart';
 import 'package:nashik/features/home/presentation/widgets/travel_services/travel_services_section.dart';
-import 'package:nashik/features/eatery/presentation/pages/eatery_screen.dart';
 import 'package:nashik/features/hotels/presentation/pages/hotels_screen.dart';
 import 'package:nashik/features/street_food/presentation/pages/street_food_screen.dart';
 import 'package:nashik/features/transport/presentation/pages/transport_screen.dart';
 
 class HomeScreen extends StatelessWidget {
+  static const routeName = 'HomeScreen';
+  static const routePath = '/HomeScreen';
+
   const HomeScreen({super.key});
 
   @override
@@ -30,12 +33,12 @@ class HomeScreen extends StatelessWidget {
                 const HeroImageHeader(),
                 // Search box overlaps the hero image
                 Transform.translate(
-                  offset: Offset(0, -29.h), // Half of search box height (58/2)
+                  offset: Offset(0, -29.h),
                   child: const SearchBoxWidget(),
                 ),
                 // Spiritual Experiences Section
                 Transform.translate(
-                  offset: Offset(0, -20.h), // Move section closer to search box
+                  offset: Offset(0, -20.h),
                   child: const SpiritualExperiencesSection(),
                 ),
                 // Spiritual Story of the Day Section

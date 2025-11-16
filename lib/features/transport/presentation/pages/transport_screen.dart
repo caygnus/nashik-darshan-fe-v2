@@ -10,6 +10,9 @@ import 'package:nashik/features/transport/presentation/widgets/transport_hero_im
 /// Transport Screen
 /// Displays transport options and services in Nashik
 class TransportScreen extends StatelessWidget {
+  static const routeName = 'TransportScreen';
+  static const routePath = '/TransportScreen';
+
   const TransportScreen({super.key});
 
   @override

@@ -13,6 +13,9 @@ import 'package:nashik/widgets/view_all_button_widget.dart';
 /// Hotels Screen
 /// Displays hotels and accommodation options in Nashik
 class HotelsScreen extends StatefulWidget {
+  static const routeName = 'HotelsScreen';
+  static const routePath = '/HotelsScreen';
+
   const HotelsScreen({super.key});
 
   @override
