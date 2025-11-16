@@ -1,7 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 
 /// Supabase configuration and global instance manager
 class SupabaseConfig {
@@ -41,8 +41,14 @@ class SupabaseConfig {
         throw Exception('Supabase URL or Anon Key is missing in .env file');
       }
 
-      // Initialize Supabase
-      await Supabase.initialize(url: supabaseUrl, anonKey: supabaseAnonKey);
+      // Initialize Supabase with PKCE auth flow
+      await Supabase.initialize(
+        url: supabaseUrl,
+        anonKey: supabaseAnonKey,
+        authOptions: const FlutterAuthClientOptions(
+          authFlowType: AuthFlowType.pkce,
+        ),
+      ); 
 
       // Get the client instance
       _client = Supabase.instance.client;

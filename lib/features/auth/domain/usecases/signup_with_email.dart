@@ -41,10 +41,12 @@ class SignupWithEmail
     }
 
     // Step 1: Sign up with Supabase to get access token
+    // Include redirect URL for email verification deep linking
     final supabaseResult = await executeWithErrorHandling<String>(() async {
       return await supabaseDataSource.signUpWithEmail(
         email: params.email,
         password: params.password,
+        redirectTo: 'com.caygnus.nashikdarshan://verify-email/',
       );
     });
 

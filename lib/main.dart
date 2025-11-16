@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nashik/android_app.dart';
+import 'package:nashik/core/deep_link/deep_link_service.dart';
 import 'package:nashik/core/di/get_it.dart';
 import 'package:nashik/core/env/config.dart';
 import 'package:nashik/core/router/app_router.dart';
@@ -24,6 +25,9 @@ void main() async {
 
   // Initialize service locator (encrypted secure storage)
   await serviceLocatorInit();
+
+  // Initialize deep linking
+  DeepLinkService().initialize();
 
   // initialize the go router
   Approuter.init();

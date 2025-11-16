@@ -1,4 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nashik/core/auth/google_auth_service.dart';
+import 'package:nashik/core/deep_link/deep_link_service.dart';
 import 'package:nashik/core/supabase/config.dart';
 import 'package:nashik/features/auth/domain/usecases/get_current_user.dart';
 import 'package:nashik/features/auth/domain/usecases/signin_with_email.dart';
@@ -17,6 +19,19 @@ class AuthCubit extends Cubit<AuthState> {
     required this.getCurrentUser,
   }) : super(const AuthState.initial()) {
     _initializeAuthState();
+    _initializeDeepLinking();
+  }
+
+  void _initializeDeepLinking() {
+    // Initialize deep link service
+    DeepLinkService().initialize();
+
+    // Check for initial deep link (if app was opened via link)
+    DeepLinkService().getInitialLink().then((uri) {
+      if (uri != null) {
+        // Deep link will be handled by the service
+      }
+    });
   }
 
   void _initializeAuthState() {
@@ -92,15 +107,24 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-  /// Sign in with Google
+  /// Sign in with Google (Native)
+  /// Uses native Google Sign-In instead of OAuth redirect
   Future<void> signInWithGoogle() async {
     try {
       emit(const AuthState.loading());
-      await SupabaseConfig.client.auth.signInWithOAuth(
-        OAuthProvider.google,
-        redirectTo: 'io.supabase.nashikdarshan://login-callback/',
-      );
-      // Note: The actual authentication will be handled by the auth state listener
+
+      // Use native Google Sign-In
+      final accessToken = await GoogleAuthService().signInWithGoogle();
+
+      if (accessToken == null) {
+        // User canceled the sign-in
+        emit(const AuthState.unauthenticated());
+        return;
+      }
+
+      // After successful Google sign-in, load the current user
+      // The session is already set in Supabase, so we just need to fetch the user
+      await _loadCurrentUser();
     } catch (e) {
       emit(AuthState.error('Failed to sign in with Google: ${e.toString()}'));
     }
@@ -109,6 +133,10 @@ class AuthCubit extends Cubit<AuthState> {
   /// Sign out
   Future<void> signOut() async {
     try {
+      // Sign out from Google if signed in
+      await GoogleAuthService().signOut();
+
+      // Sign out from Supabase
       await SupabaseConfig.client.auth.signOut();
       emit(const AuthState.unauthenticated());
     } catch (e) {
@@ -117,16 +145,40 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   /// Reset password
+  /// Sends password reset email with deep link
   Future<void> resetPassword(String email) async {
     try {
+      emit(const AuthState.loading());
       await SupabaseConfig.client.auth.resetPasswordForEmail(
         email,
-        redirectTo: 'io.supabase.nashikdarshan://reset-password/',
+        redirectTo: 'com.caygnus.nashikdarshan://reset-password/',
       );
+      emit(const AuthState.unauthenticated());
     } catch (e) {
       emit(
         AuthState.error('Failed to send password reset email: ${e.toString()}'),
       );
+    }
+  }
+
+  /// Verify email
+  /// Called when user clicks email verification link
+  Future<void> verifyEmail(String token, String email) async {
+    try {
+      emit(const AuthState.loading());
+      final response = await SupabaseConfig.client.auth.verifyOTP(
+        type: OtpType.email,
+        token: token,
+        email: email,
+      );
+
+      if (response.session != null) {
+        await _loadCurrentUser();
+      } else {
+        emit(const AuthState.unauthenticated());
+      }
+    } catch (e) {
+      emit(AuthState.error('Failed to verify email: ${e.toString()}'));
     }
   }
 }
