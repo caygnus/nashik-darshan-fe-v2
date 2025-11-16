@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class Config {
   // Keys (constants)
   static const API_BASE_URL = 'API_BASE_URL';
+  static const GOOGLE_WEB_CLIENT_ID = 'GOOGLE_WEB_CLIENT_ID';
 
   // Internal singleton fields
   static Future<Config>? _loader;
@@ -63,4 +64,5 @@ class Config {
 
   // Typed getters
   String get baseUrl => _get(API_BASE_URL);
+  String get googleWebClientId => _get(GOOGLE_WEB_CLIENT_ID);
 }

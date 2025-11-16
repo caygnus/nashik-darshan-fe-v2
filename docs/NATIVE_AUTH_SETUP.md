@@ -1,12 +1,36 @@
-# Native Authentication Setup Guide
+# Google Authentication Setup Guide
 
-This guide explains how to set up native Google Sign-In and deep linking for email verification in the Nashik Darshan app.
+This guide explains how to set up Google Sign-In with Supabase and deep linking for email verification in the Nashik Darshan app.
 
 ## Features Implemented
 
-1. **Native Google Sign-In**: Uses `google_sign_in` package for in-app Google authentication
-2. **Deep Linking**: Handles email verification and password reset links within the app
-3. **Access Token Handling**: Properly manages access tokens after successful authentication
+1. **Google Sign-In with Supabase OAuth**: Uses Supabase's built-in OAuth flow for Google authentication
+2. **Deep Linking**: Handles OAuth callbacks, email verification, and password reset links within the app
+3. **Session Management**: Supabase automatically handles token management and session creation
+
+## Authentication Method
+
+**Current Implementation: Supabase OAuth (Browser-based)**
+
+The app now uses Supabase's built-in `signInWithOAuth()` method which:
+
+- Opens a browser/WebView for Google sign-in
+- Handles the entire OAuth flow automatically
+- Redirects back to the app via deep link
+- Creates the session automatically
+
+**Advantages:**
+
+- ✅ Simpler setup (no `google_sign_in` package needed)
+- ✅ No need for Web OAuth Client ID in `.env` file
+- ✅ Supabase handles all token management
+- ✅ Works consistently across platforms
+- ✅ No SHA-1 fingerprint issues
+
+**Trade-offs:**
+
+- Uses browser/WebView instead of native dialog (slightly less native feel)
+- Requires internet connection for OAuth flow
 
 ## Important: Understanding OAuth Client Configuration for Supabase
 
@@ -19,90 +43,83 @@ When you create an OAuth client ID in Google Cloud Console, you might see option
 
 **What you actually need for Supabase:**
 
-1. Create OAuth client IDs in Google Cloud Console (one for Android, one for iOS)
-2. Copy the **OAuth Client ID** values (the strings that look like `xxx.apps.googleusercontent.com`)
-3. Add those Client IDs to Supabase under Authentication → Providers → Google
-4. The `google_sign_in` package automatically uses the OAuth client ID from Google Cloud Console
-5. **No JSON files need to be downloaded or added to your project**
+1. Create OAuth client IDs in Google Cloud Console:
+   - **Web OAuth Client ID** (REQUIRED - used by Supabase for OAuth flow)
+   - **Android OAuth Client ID** (optional - for better UX on Android)
+   - **iOS OAuth Client ID** (optional - for better UX on iOS)
+2. Copy the **OAuth Client ID** and **Client Secret** values
+3. Add Web Client ID and Secret to Supabase under Authentication → Providers → Google
+4. Add Android/iOS Client IDs to Supabase if created (optional)
+5. **No environment variables needed** - everything is configured in Supabase Dashboard
+6. **No JSON files need to be downloaded or added to your project**
 
 **How the flow works:**
 
-1. User signs in with Google using `google_sign_in` package (native sign-in)
-2. App receives Google ID token and access token
-3. App sends tokens to Supabase using `signInWithIdToken()`
-4. Supabase verifies tokens and creates/updates user session
-5. User is authenticated in your app via Supabase
-
-After creating the OAuth client ID, you'll see it listed in the Credentials page. Copy the **Client ID** (not the client secret) and add it to Supabase.
+1. User taps "Sign in with Google" in your app
+2. App calls Supabase's `signInWithOAuth()` which opens browser/WebView
+3. User signs in with Google in the browser
+4. Google redirects back to app via deep link: `com.caygnus.nashikdarshan://login-callback/`
+5. App handles the deep link and Supabase exchanges the OAuth code for tokens
+6. Supabase creates/updates user session automatically
+7. User is authenticated in your app via Supabase
 
 ## Setup Instructions
 
 ### 1. Google Sign-In Configuration
 
-#### Android Setup
+#### Step 1: Create OAuth Clients in Google Cloud Console
 
-1. **Get SHA-1 Certificate Fingerprint**:
+You need to create at least **ONE** OAuth Client ID (Web is required):
 
-   ```bash
-   # Debug keystore
-   keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android
+**a) Web OAuth Client ID (REQUIRED):**
 
-   # Release keystore (if you have one)
-   keytool -list -v -keystore /path/to/your/keystore.jks -alias your-key-alias
-   ```
+- Go to [Google Cloud Console](https://console.cloud.google.com/)
+- Create a new project or select existing one
+- Go to "APIs & Services" → "Credentials"
+- Click "Create Credentials" → "OAuth client ID"
+- If prompted, configure the OAuth consent screen first
+- Select "Web application" application type
+- Enter a name (e.g., "Nashik Darshan Web Client")
+- Under "Authorized redirect URIs", add:
+  - `https://YOUR_PROJECT_REF.supabase.co/auth/v1/callback`
+  - (Replace YOUR_PROJECT_REF with your Supabase project reference - you can find this in your Supabase project URL)
+- Click "Create"
+- Copy the **Client ID** and **Client Secret** (you'll need both for Supabase)
 
-2. **Configure OAuth Client in Google Cloud Console**:
+**b) Android OAuth Client ID (Optional - for better UX):**
 
-   - Go to [Google Cloud Console](https://console.cloud.google.com/)
-   - Create a new project or select existing one
-   - Go to "APIs & Services" → "Credentials"
-   - Click "Create Credentials" → "OAuth client ID"
-   - If prompted, configure the OAuth consent screen first
-   - Select "Android" application type
-   - Enter your package name: `com.caygnus.nashikdarshan`
-   - Enter the SHA-1 fingerprint from step 1
-   - Click "Create"
-   - **Note**: You don't need to download any JSON file. The OAuth client ID is automatically used by the `google_sign_in` package.
+- In the same "Credentials" page, click "Create Credentials" → "OAuth client ID" again
+- Select "Android" application type
+- Enter your package name: `com.caygnus.nashikdarshan`
+- Enter the SHA-1 fingerprint (get it using the command below)
+- Click "Create"
+- Copy the **Client ID** (you'll need this for Supabase)
 
-3. **Important Notes**:
-   - The `google_sign_in` package automatically uses the OAuth client ID from Google Cloud Console
-   - You don't need `google-services.json` (that's only for Firebase)
-   - The client_secret JSON file you might see is for server-side OAuth flows, not needed for Flutter app
-   - Make sure to create separate OAuth client IDs for both debug and release keystores if you're using different SHA-1 fingerprints
+**To get SHA-1 fingerprint (for Android OAuth Client ID):**
 
-#### iOS Setup
+```bash
+# Debug keystore
+keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android
 
-1. **Get Bundle ID**:
+# Release keystore (if you have one)
+keytool -list -v -keystore /path/to/your/keystore.jks -alias your-key-alias
+```
 
-   - Check your bundle ID in Xcode (should be `com.caygnus.nashikdarshan`)
+**c) iOS OAuth Client ID (Optional - for better UX):**
 
-2. **Configure OAuth Client in Google Cloud Console**:
+- In the same "Credentials" page, click "Create Credentials" → "OAuth client ID" again
+- Select "iOS" application type
+- Enter your Bundle ID: `com.caygnus.nashikdarshan`
+- Click "Create"
+- Copy the **Client ID** (you'll need this for Supabase)
 
-   - Go to [Google Cloud Console](https://console.cloud.google.com/)
-   - Go to "APIs & Services" → "Credentials"
-   - Click "Create Credentials" → "OAuth client ID"
-   - Select "iOS" application type
-   - Enter your Bundle ID: `com.caygnus.nashikdarshan`
-   - Click "Create"
-   - **Note**: You don't need to download `GoogleService-Info.plist` (that's only for Firebase). The OAuth client ID is automatically used by the `google_sign_in` package.
+**Important Notes:**
 
-3. **Update Info.plist**:
-   - URL scheme is already configured in `ios/Runner/Info.plist`:
-     ```xml
-     <key>CFBundleURLTypes</key>
-     <array>
-         <dict>
-             <key>CFBundleTypeRole</key>
-             <string>Editor</string>
-             <key>CFBundleURLName</key>
-             <string>com.caygnus.nashikdarshan</string>
-             <key>CFBundleURLSchemes</key>
-             <array>
-                 <string>com.caygnus.nashikdarshan</string>
-             </array>
-         </dict>
-     </array>
-     ```
+- The Web OAuth Client ID is REQUIRED - Supabase uses it for the OAuth flow
+- Android/iOS Client IDs are optional but recommended for better user experience
+- You don't need `google-services.json` (that's only for Firebase)
+- You don't need to add anything to your `.env` file
+- The client_secret JSON file you might see is for server-side OAuth flows, ignore it
 
 ### 2. Supabase Configuration
 
@@ -122,21 +139,25 @@ Since you're using Supabase for authentication, configure the following in your 
    - Go to Authentication → Providers
    - Find "Google" in the list of providers
    - Toggle it to **Enabled**
-   - You'll see fields for OAuth client IDs:
-     - **Client ID (for Android)**: Paste your Android OAuth Client ID here
-     - **Client ID (for iOS)**: Paste your iOS OAuth Client ID here
-   - **How to find your OAuth Client ID from Google Cloud Console**:
+   - You'll see fields for OAuth configuration:
+     - **Client ID (for OAuth)**: Paste your **Web OAuth Client ID** here (REQUIRED)
+     - **Client Secret (for OAuth)**: Paste your **Web OAuth Client Secret** here (REQUIRED)
+     - **Client ID (for Android)**: Paste your Android OAuth Client ID here (optional)
+     - **Client ID (for iOS)**: Paste your iOS OAuth Client ID here (optional)
+   - **How to find your OAuth credentials from Google Cloud Console**:
      1. Go to [Google Cloud Console](https://console.cloud.google.com/)
      2. Select your project
      3. Go to "APIs & Services" → "Credentials"
      4. Find your OAuth 2.0 Client IDs in the list
-     5. Click on the client ID you created (Android or iOS)
-     6. Copy the **Client ID** value (looks like `xxx.apps.googleusercontent.com`)
-     7. Paste this into the corresponding field in Supabase
-   - **Important**:
-     - Use the **Client ID** (not the client secret) for Supabase configuration
-     - You need separate OAuth client IDs for Android and iOS
-     - Leave the "Client Secret" field empty in Supabase (not needed for native sign-in)
+     5. Click on the **Web** client ID you created
+     6. Copy the **Client ID** and **Client Secret** values
+     7. Paste these into the corresponding fields in Supabase
+   - **Important Notes**:
+     - ✅ **REQUIRED**: Web OAuth Client ID and Client Secret (used by Supabase for OAuth flow)
+     - ✅ **Optional**: Android OAuth Client ID (for better UX on Android)
+     - ✅ **Optional**: iOS OAuth Client ID (for better UX on iOS)
+     - The Web Client ID and Secret are used by Supabase to handle the OAuth flow
+     - Android/iOS Client IDs are only used if you want platform-specific optimizations
    - Click "Save" to apply changes
 
 ### 3. Deep Linking Configuration
@@ -173,19 +194,20 @@ Deep linking is already configured in `ios/Runner/Info.plist` with URL scheme: `
 
 ## How It Works
 
-### Google Sign-In Flow (with Supabase)
+### Google Sign-In Flow (with Supabase OAuth)
 
 1. User taps "Sign in with Google" in your app
-2. Native Google Sign-In dialog appears (no browser redirect) - handled by `google_sign_in` package
-3. User selects Google account
-4. App receives Google access token and ID token from Google
-5. App calls `SupabaseConfig.client.auth.signInWithIdToken()` with the tokens
-6. Supabase verifies the tokens with Google and creates/updates user session
-7. App receives Supabase session (access token, refresh token, user data)
-8. User is authenticated in your app via Supabase
-9. User is redirected to the main app screen
+2. App calls `SupabaseConfig.client.auth.signInWithOAuth()` which opens browser/WebView
+3. User signs in with Google in the browser
+4. Google redirects to Supabase's OAuth callback URL
+5. Supabase exchanges the OAuth code for tokens and creates a session
+6. Supabase redirects back to app via deep link: `com.caygnus.nashikdarshan://login-callback/`
+7. App handles the deep link and calls `getSessionFromUrl()` to complete authentication
+8. Supabase session is created (access token, refresh token, user data)
+9. Auth state listener detects the session change and updates the app state
+10. User is authenticated in your app via Supabase
 
-**Key Point**: The authentication is handled by Supabase, but the initial Google sign-in is native (no web browser).
+**Key Point**: The entire OAuth flow is handled by Supabase. The app just initiates the flow and handles the callback.
 
 ### Email Verification Flow
 
@@ -243,19 +265,23 @@ xcrun simctl openurl booted "com.caygnus.nashikdarshan://verify-email/?token=tes
 
 ### Google Sign-In Issues
 
+- **"Failed to initiate Google Sign-In"**:
+  - ✅ **Most common cause**: Missing Web OAuth Client ID or Secret in Supabase
+  - Check that Web OAuth Client ID and Secret are configured in Supabase Dashboard
+  - Verify you created a Web OAuth Client ID in Google Cloud Console
+  - Make sure the redirect URI is added in Google Cloud Console: `https://YOUR_PROJECT_REF.supabase.co/auth/v1/callback`
+- **"OAuth callback error"**:
+  - Verify the redirect URL is configured in Supabase: `com.caygnus.nashikdarshan://login-callback/`
+  - Check that deep linking is properly configured in AndroidManifest.xml and Info.plist
+  - Ensure the app can handle the deep link callback
+- **Browser opens but sign-in fails**:
+  - Check that the OAuth consent screen is configured in Google Cloud Console
+  - Verify the redirect URI in Google Cloud Console matches Supabase's callback URL
+  - Ensure the Web OAuth Client ID and Secret in Supabase match Google Cloud Console
 - **"Sign in failed"**:
-  - Check SHA-1 fingerprint matches Google Cloud Console
   - Verify package name matches exactly: `com.caygnus.nashikdarshan`
-  - Make sure you created an Android OAuth client ID (not Web application)
-- **"Developer error"**:
-  - Verify OAuth client ID is correctly configured in Google Cloud Console
-  - Check that the OAuth consent screen is configured
-  - Ensure the OAuth client ID is added to Supabase Google provider settings
-- **No accounts shown**:
-  - Check Google Play Services is installed (Android)
-  - Verify you're using the correct OAuth client ID for your build type (debug vs release)
-- **"Can't find google-services.json"**:
-  - This file is NOT needed for `google_sign_in` package. Only configure OAuth client IDs in Google Cloud Console.
+  - Check that Google provider is enabled in Supabase Dashboard
+  - Ensure all OAuth credentials are correctly configured
 
 ### Deep Link Issues
 

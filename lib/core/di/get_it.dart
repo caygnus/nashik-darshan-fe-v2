@@ -64,7 +64,6 @@ Future<void> serviceLocatorInit() async {
     () => GetCurrentUser(locator<AuthRepository>()),
   );
 
-  // 4. Cubits (use registerFactory for Cubits - new instance per widget)
   locator.registerFactory<AuthCubit>(
     () => AuthCubit(
       signupWithEmail: locator<SignupWithEmail>(),

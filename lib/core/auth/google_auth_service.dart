@@ -1,112 +1,88 @@
-import 'package:flutter/services.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nashik/core/supabase/config.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-/// Service for native Google Sign-In with Supabase
+/// Service for Google Sign-In with Supabase using OAuth redirect
 ///
-/// This service handles the native Google Sign-In flow and exchanges
-/// the Google tokens with Supabase for authentication.
+/// This service uses Supabase's built-in OAuth flow which handles
+/// the entire authentication process including token exchange.
 ///
 /// Flow:
-/// 1. User signs in with Google using native sign-in (no browser redirect)
-/// 2. App receives Google ID token and access token
-/// 3. App exchanges tokens with Supabase using signInWithIdToken()
-/// 4. Supabase verifies tokens and creates/updates user session
-/// 5. User is authenticated in the app via Supabase
+/// 1. User taps "Sign in with Google"
+/// 2. App calls Supabase's signInWithOAuth() which opens browser/WebView
+/// 3. User signs in with Google in the browser
+/// 4. Google redirects back to app via deep link
+/// 5. Supabase automatically handles the callback and creates session
+/// 6. User is authenticated in the app via Supabase
 ///
-/// Note: The OAuth Client ID must be configured in:
-/// - Google Cloud Console (Android/iOS OAuth client IDs)
+/// Advantages:
+/// - Simpler setup (no need for google_sign_in package)
+/// - No need for Web OAuth Client ID in .env
+/// - Supabase handles all token management
+/// - Works consistently across platforms
+///
+/// Note: The OAuth Client IDs must be configured in:
+/// - Google Cloud Console:
+///   - Web OAuth Client ID (REQUIRED - used by Supabase)
+///   - Android OAuth Client ID (optional, for better UX)
+///   - iOS OAuth Client ID (optional, for better UX)
 /// - Supabase Dashboard (Authentication → Providers → Google)
+///   - Add Web OAuth Client ID and Client Secret
+///   - Add Android/iOS Client IDs if created
 class GoogleAuthService {
   static final GoogleAuthService _instance = GoogleAuthService._internal();
   factory GoogleAuthService() => _instance;
   GoogleAuthService._internal();
 
-  /// GoogleSignIn instance configured for native sign-in
-  /// The OAuth Client ID is automatically read from Google Cloud Console
-  /// based on the app's package name and SHA-1 fingerprint (Android)
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: ['email', 'profile'],
-    // Note: serverClientId is optional for native sign-in with Supabase
-    // If Supabase requires it, you can add it here:
-    // serverClientId: 'your-web-client-id.apps.googleusercontent.com',
-  );
+  /// Deep link redirect URL for OAuth callback
+  static const String _redirectUrl =
+      'com.caygnus.nashikdarshan://login-callback/';
 
-  /// Sign in with Google natively and authenticate with Supabase
+  /// Sign in with Google using Supabase's OAuth flow
   ///
-  /// Returns the Supabase access token if successful, null if user canceled
+  /// This opens a browser/WebView for Google sign-in and redirects back
+  /// to the app via deep link. Supabase handles the session automatically.
+  ///
+  /// Returns true if the OAuth flow was initiated successfully
+  /// The actual authentication is handled via the deep link callback
   ///
   /// Throws Exception if sign-in fails
-  Future<String?> signInWithGoogle() async {
+  Future<bool> signInWithGoogle() async {
     try {
-      // Step 1: Trigger the native Google Sign-In flow
-      // This shows the native Google account picker (no browser redirect)
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-
-      if (googleUser == null) {
-        // User canceled the sign-in dialog
-        return null;
-      }
-
-      // Step 2: Obtain authentication tokens from Google
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-
-      // Step 3: Extract the ID token and access token
-      final String? accessToken = googleAuth.accessToken;
-      final String? idToken = googleAuth.idToken;
-
-      if (accessToken == null || idToken == null) {
-        throw Exception(
-          'Failed to get Google authentication tokens. '
-          'Please ensure Google Sign-In is properly configured.',
-        );
-      }
-
-      // Step 4: Exchange Google tokens with Supabase
-      // Supabase will verify the tokens with Google and create/update user session
-      final response = await SupabaseConfig.client.auth.signInWithIdToken(
-        provider: OAuthProvider.google,
-        idToken: idToken,
-        accessToken: accessToken,
+      // Initiate OAuth flow with Supabase
+      // This will open a browser/WebView for Google sign-in
+      await SupabaseConfig.client.auth.signInWithOAuth(
+        OAuthProvider.google,
+        redirectTo: _redirectUrl,
+        authScreenLaunchMode: LaunchMode.externalApplication,
       );
 
-      // Step 5: Verify Supabase session was created
-      if (response.session != null) {
-        // Return the Supabase access token for the authenticated session
-        return response.session?.accessToken;
-      }
-
-      throw Exception(
-        'Failed to create Supabase session. '
-        'Please verify Google OAuth Client ID is configured in Supabase Dashboard.',
-      );
-    } on PlatformException catch (e) {
-      // Handle platform-specific errors (e.g., Google Play Services not available)
-      throw Exception('Google Sign-In platform error: ${e.message}');
+      // Return true to indicate OAuth flow was initiated
+      // The actual session will be created when the deep link callback is handled
+      return true;
     } catch (e) {
-      // Handle other errors
-      throw Exception('Google Sign-In error: $e');
+      throw Exception(
+        'Failed to initiate Google Sign-In: $e\n'
+        'Please ensure:\n'
+        '1. Google provider is enabled in Supabase Dashboard\n'
+        '2. Web OAuth Client ID and Secret are configured in Supabase\n'
+        '3. Redirect URL is configured in Supabase: $_redirectUrl',
+      );
     }
   }
 
-  /// Sign out from Google
+  /// Sign out from Google and Supabase
   Future<void> signOut() async {
     try {
-      await _googleSignIn.signOut();
+      // Sign out from Supabase (this also signs out from Google OAuth)
+      await SupabaseConfig.client.auth.signOut();
     } catch (e) {
       // Ignore errors during sign out
     }
   }
 
-  /// Check if user is already signed in to Google
+  /// Check if user is signed in
   Future<bool> isSignedIn() async {
-    return await _googleSignIn.isSignedIn();
-  }
-
-  /// Get current Google user
-  Future<GoogleSignInAccount?> getCurrentUser() async {
-    return _googleSignIn.currentUser;
+    final session = SupabaseConfig.client.auth.currentSession;
+    return session != null;
   }
 }

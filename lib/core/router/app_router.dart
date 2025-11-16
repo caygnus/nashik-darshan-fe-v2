@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:nashik/core/pages/bottom_bar_page.dart';
 import 'package:nashik/core/supabase/config.dart';
 import 'package:nashik/features/auth/presentation/pages/login_page.dart';
+import 'package:nashik/features/auth/presentation/pages/oauth_callback_page.dart';
 import 'package:nashik/features/auth/presentation/pages/signup_page.dart';
 import 'package:nashik/features/auth/presentation/pages/splash_screen.dart';
 import 'package:nashik/features/category/presentation/pages/category_page.dart';
@@ -128,6 +129,23 @@ class Approuter {
         pageBuilder: (context, state) =>
             getPage(child: const SignupPage(), state: state),
       ),
+      GoRoute(
+        path: OAuthCallbackPage.routePath,
+        name: OAuthCallbackPage.routeName,
+        pageBuilder: (context, state) =>
+            getPage(child: const OAuthCallbackPage(), state: state),
+      ),
+      // Catch-all route for unmatched paths (not deep links)
+      // Deep links are handled by DeepLinkService and prevented in handleRedirect
+      GoRoute(
+        path: '/:path(.*)',
+        pageBuilder: (context, state) {
+          // For unmatched routes, redirect to home via the redirect handler
+          // This route should never actually be shown because handleRedirect
+          // will redirect unmatched routes to home before this page is built
+          return getPage(child: const HomeScreen(), state: state);
+        },
+      ),
     ];
     router = GoRouter(
       initialLocation: HomeScreen.routePath,
@@ -160,13 +178,31 @@ extension GoRouterExtension on GoRouter {
 final List<String> protectedRoutes = [ProfilePage.routePath];
 
 String? handleRedirect(BuildContext context, GoRouterState state) {
-  final path = state.uri.path;
+  final uri = state.uri;
+  final path = uri.path;
 
-  // check if the user is logged in using supabase
+  if (uri.scheme == 'com.caygnus.nashikdarshan' &&
+      (uri.pathSegments.contains('login-callback') ||
+          uri.pathSegments.contains('auth-callback'))) {
+    final callbackUri = Uri(
+      path: OAuthCallbackPage.routePath,
+      queryParameters: {'deep_link': uri.toString()},
+    );
+    return callbackUri.toString();
+  }
+
+  if (uri.scheme == 'com.caygnus.nashikdarshan') {
+    final currentLocation = state.matchedLocation.isNotEmpty
+        ? state.matchedLocation
+        : HomeScreen.routePath;
+    return currentLocation;
+  }
+
   final user = SupabaseConfig.client.auth.currentUser;
 
   if (user == null && protectedRoutes.contains(path)) {
     return LoginPage.routePath;
   }
+
   return null;
 }

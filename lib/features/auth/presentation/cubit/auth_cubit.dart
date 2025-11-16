@@ -23,19 +23,11 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void _initializeDeepLinking() {
-    // Initialize deep link service
     DeepLinkService().initialize();
-
-    // Check for initial deep link (if app was opened via link)
-    DeepLinkService().getInitialLink().then((uri) {
-      if (uri != null) {
-        // Deep link will be handled by the service
-      }
-    });
+    DeepLinkService().getInitialLink();
   }
 
   void _initializeAuthState() {
-    // Listen to auth state changes
     SupabaseConfig.client.auth.onAuthStateChange.listen((data) {
       final AuthChangeEvent event = data.event;
       final Session? session = data.session;
@@ -47,7 +39,6 @@ class AuthCubit extends Cubit<AuthState> {
       }
     });
 
-    // Check initial auth state
     final user = SupabaseConfig.client.auth.currentUser;
     if (user != null) {
       _loadCurrentUser();
@@ -64,8 +55,6 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-  /// Sign up with email and password
-  /// This orchestrates: Supabase signup -> Backend signup
   Future<void> signUpWithEmail({
     required String email,
     required String password,
@@ -83,14 +72,12 @@ class AuthCubit extends Cubit<AuthState> {
 
     final result = await signupWithEmail(params);
 
-    result.fold((failure) => emit(AuthState.error(failure.message)), (_) async {
-      // After successful signup, load the current user
-      await _loadCurrentUser();
-    });
+    result.fold(
+      (failure) => emit(AuthState.error(failure.message)),
+      (_) async => _loadCurrentUser(),
+    );
   }
 
-  /// Sign in with email and password
-  /// This orchestrates: Supabase signin -> Get user from backend
   Future<void> signInWithEmail({
     required String email,
     required String password,
@@ -107,45 +94,24 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-  /// Sign in with Google (Native)
-  /// Uses native Google Sign-In instead of OAuth redirect
   Future<void> signInWithGoogle() async {
     try {
       emit(const AuthState.loading());
-
-      // Use native Google Sign-In
-      final accessToken = await GoogleAuthService().signInWithGoogle();
-
-      if (accessToken == null) {
-        // User canceled the sign-in
-        emit(const AuthState.unauthenticated());
-        return;
-      }
-
-      // After successful Google sign-in, load the current user
-      // The session is already set in Supabase, so we just need to fetch the user
-      await _loadCurrentUser();
+      await GoogleAuthService().signInWithGoogle();
     } catch (e) {
       emit(AuthState.error('Failed to sign in with Google: ${e.toString()}'));
     }
   }
 
-  /// Sign out
   Future<void> signOut() async {
     try {
-      // Sign out from Google if signed in
       await GoogleAuthService().signOut();
-
-      // Sign out from Supabase
-      await SupabaseConfig.client.auth.signOut();
       emit(const AuthState.unauthenticated());
     } catch (e) {
       emit(AuthState.error('Failed to sign out: ${e.toString()}'));
     }
   }
 
-  /// Reset password
-  /// Sends password reset email with deep link
   Future<void> resetPassword(String email) async {
     try {
       emit(const AuthState.loading());
@@ -161,8 +127,6 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  /// Verify email
-  /// Called when user clicks email verification link
   Future<void> verifyEmail(String token, String email) async {
     try {
       emit(const AuthState.loading());
