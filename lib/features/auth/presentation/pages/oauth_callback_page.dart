@@ -23,11 +23,17 @@ class OAuthCallbackPage extends StatefulWidget {
 class _OAuthCallbackPageState extends State<OAuthCallbackPage> {
   bool _isProcessing = true;
   String? _errorMessage;
+  bool _hasHandledCallback = false;
 
   @override
-  void initState() {
-    super.initState();
-    _handleOAuthCallback();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_hasHandledCallback) {
+      _hasHandledCallback = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _handleOAuthCallback();
+      });
+    }
   }
 
   Future<void> _handleOAuthCallback() async {
@@ -43,7 +49,11 @@ class _OAuthCallbackPageState extends State<OAuthCallbackPage> {
 
       if (mounted) {
         context.read<AuthCubit>().loadCurrentUser();
-        context.goNamed(HomeScreen.routeName);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            context.goNamed(HomeScreen.routeName);
+          }
+        });
       }
     } catch (e) {
       debugPrint('OAuth callback error: $e');
@@ -153,6 +163,7 @@ class _OAuthCallbackPageState extends State<OAuthCallbackPage> {
                   padding: const EdgeInsets.all(24.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       const Icon(
                         Icons.error_outline,
@@ -171,19 +182,22 @@ class _OAuthCallbackPageState extends State<OAuthCallbackPage> {
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       const SizedBox(height: 32),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          OutlinedButton(
-                            onPressed: _handleGoToLogin,
-                            child: const Text('Go to Login'),
-                          ),
-                          const SizedBox(width: 16),
-                          ElevatedButton(
-                            onPressed: _handleRetry,
-                            child: const Text('Retry'),
-                          ),
-                        ],
+                      Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            OutlinedButton(
+                              onPressed: _handleGoToLogin,
+                              child: const Text('Go to Login'),
+                            ),
+                            const SizedBox(width: 16),
+                            ElevatedButton(
+                              onPressed: _handleRetry,
+                              child: const Text('Retry'),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
