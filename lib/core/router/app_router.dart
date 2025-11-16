@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nashik/core/pages/bottom_bar_page.dart';
+import 'package:nashik/core/supabase/config.dart';
 import 'package:nashik/features/auth/presentation/pages/login_page.dart';
 import 'package:nashik/features/auth/presentation/pages/signup_page.dart';
 import 'package:nashik/features/auth/presentation/pages/splash_screen.dart';
@@ -132,6 +133,7 @@ class Approuter {
       initialLocation: HomeScreen.routePath,
       navigatorKey: parentNavigatorKey,
       routes: routes,
+      redirect: handleRedirect,
     );
   }
   static Page getPage({required Widget child, required GoRouterState state}) {
@@ -153,4 +155,20 @@ extension GoRouterExtension on GoRouter {
       Stream<String>.periodic(const Duration(seconds: 1), (computationCount) {
         return Approuter.router.location;
       });
+}
+
+final List<String> protectedRoutes = [ProfilePage.routePath];
+
+String? handleRedirect(BuildContext context, GoRouterState state) {
+  final path = state.uri.path;
+
+  // check if the user is logged in using supabase
+  final user = SupabaseConfig.client.auth.currentUser;
+
+  if (user == null && protectedRoutes.contains(path)) {
+    return LoginPage.routePath;
+  } else if (user != null && !protectedRoutes.contains(path)) {
+    return HomeScreen.routePath;
+  }
+  return null;
 }

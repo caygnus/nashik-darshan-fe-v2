@@ -7,7 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class SupabaseConfig {
   // Environment variable keys
   static const String SUPABASE_URL_KEY = 'SUPABASE_URL';
-  static const String SUPABASE_ANON_KEY = 'SUPABASE_ANON_KEY';
+  static const String SUPABASE_PUBLISHABLE_KEY = 'SUPABASE_PUBLISHABLE_KEY';
 
   // Singleton instance
   static SupabaseConfig? _instance;
@@ -34,7 +34,7 @@ class SupabaseConfig {
     try {
       // Get values from environment variables
       final supabaseUrl = dotenv.get(SUPABASE_URL_KEY);
-      final supabaseAnonKey = dotenv.get(SUPABASE_ANON_KEY);
+      final supabaseAnonKey = dotenv.get(SUPABASE_PUBLISHABLE_KEY);
 
       // Validate that values are not empty
       if (supabaseUrl.isEmpty || supabaseAnonKey.isEmpty) {
