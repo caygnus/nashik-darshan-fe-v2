@@ -6,6 +6,7 @@ import 'package:nashik/core/theme/colors.dart';
 import 'package:nashik/core/utils/loading_overlay.dart';
 import 'package:nashik/core/utils/snackbar.dart';
 import 'package:nashik/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:nashik/features/auth/presentation/cubit/auth_state.dart';
 import 'package:nashik/features/auth/presentation/pages/login_page.dart';
 import 'package:nashik/features/home/presentation/pages/home_screen.dart';
 
@@ -55,9 +56,9 @@ class _SignupPageState extends State<SignupPage> {
 
     int strength = 0;
     if (password.length >= 8) strength++;
-    if (password.contains(RegExp(r'[a-z]'))) strength++;
-    if (password.contains(RegExp(r'[A-Z]'))) strength++;
-    if (password.contains(RegExp(r'[0-9]'))) strength++;
+    if (password.contains(RegExp('[a-z]'))) strength++;
+    if (password.contains(RegExp('[A-Z]'))) strength++;
+    if (password.contains(RegExp('[0-9]'))) strength++;
     if (password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) strength++;
 
     setState(() {
@@ -100,7 +101,7 @@ class _SignupPageState extends State<SignupPage> {
       case PasswordStrength.medium:
         return 0.66;
       case PasswordStrength.strong:
-        return 1.0;
+        return 1;
     }
   }
 
@@ -110,9 +111,13 @@ class _SignupPageState extends State<SignupPage> {
         Snackbar.showError('Passwords do not match');
         return;
       }
+      // Extract name from email (before @) as default, or use email if no name field
+      final email = _emailController.text.trim();
+      final name = email.split('@').first; // Use email prefix as name
       context.read<AuthCubit>().signUpWithEmail(
-        email: _emailController.text.trim(),
+        email: email,
         password: _passwordController.text,
+        name: name,
       );
     }
   }
@@ -125,15 +130,20 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
-        if (state is AuthAuthenticated) {
-          context.goNamed(HomeScreen.routeName);
-        } else if (state is AuthError) {
-          Snackbar.showError(state.message);
-        }
+        state.when(
+          initial: () {},
+          loading: () {},
+          authenticated: (_) => context.goNamed(HomeScreen.routeName),
+          unauthenticated: () {},
+          error: (String message) => Snackbar.showError(message),
+        );
       },
       child: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, state) {
-          final isLoading = state is AuthLoading;
+          final isLoading = state.maybeWhen(
+            loading: () => true,
+            orElse: () => false,
+          );
           return LoadingOverlay(
             isLoading: isLoading,
             message: isLoading ? 'Creating account...' : null,

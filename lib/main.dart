@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
       designSize: const Size(360, 920),
       child: MultiBlocProvider(
         providers: [
-          BlocProvider(create: (context) => AuthCubit()),
+          BlocProvider(create: (context) => locator<AuthCubit>()),
           BlocProvider(create: (context) => ProfileCubit()),
         ],
         child: Platform.isIOS ? const IosApp() : const AndroidApp(),

@@ -1,32 +1,13 @@
-part of 'auth_cubit.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:nashik/features/auth/domain/entities/user.dart';
 
-abstract class AuthState extends Equatable {
-  const AuthState();
+part 'auth_state.freezed.dart';
 
-  @override
-  List<Object> get props => [];
-}
-
-class AuthInitial extends AuthState {}
-
-class AuthLoading extends AuthState {}
-
-class AuthAuthenticated extends AuthState {
-  final String userId;
-
-  const AuthAuthenticated(this.userId);
-
-  @override
-  List<Object> get props => [userId];
-}
-
-class AuthUnauthenticated extends AuthState {}
-
-class AuthError extends AuthState {
-  final String message;
-
-  const AuthError(this.message);
-
-  @override
-  List<Object> get props => [message];
+@freezed
+class AuthState with _$AuthState {
+  const factory AuthState.initial() = _Initial;
+  const factory AuthState.loading() = _Loading;
+  const factory AuthState.authenticated(User user) = _Authenticated;
+  const factory AuthState.unauthenticated() = _Unauthenticated;
+  const factory AuthState.error(String message) = _Error;
 }

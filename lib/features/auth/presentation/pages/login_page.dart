@@ -6,6 +6,7 @@ import 'package:nashik/core/theme/colors.dart';
 import 'package:nashik/core/utils/loading_overlay.dart';
 import 'package:nashik/core/utils/snackbar.dart';
 import 'package:nashik/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:nashik/features/auth/presentation/cubit/auth_state.dart';
 import 'package:nashik/features/auth/presentation/pages/signup_page.dart';
 import 'package:nashik/features/home/presentation/pages/home_screen.dart';
 
@@ -58,15 +59,20 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
-        if (state is AuthAuthenticated) {
-          context.goNamed(HomeScreen.routeName);
-        } else if (state is AuthError) {
-          Snackbar.showError(state.message);
-        }
+        state.when(
+          initial: () {},
+          loading: () {},
+          authenticated: (_) => context.goNamed(HomeScreen.routeName),
+          unauthenticated: () {},
+          error: (String message) => Snackbar.showError(message),
+        );
       },
       child: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, state) {
-          final isLoading = state is AuthLoading;
+          final isLoading = state.maybeWhen(
+            loading: () => true,
+            orElse: () => false,
+          );
           return LoadingOverlay(
             isLoading: isLoading,
             message: isLoading ? 'Signing in...' : null,
