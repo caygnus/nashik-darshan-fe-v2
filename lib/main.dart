@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nashik/core/app/android_app.dart';
-import 'package:nashik/core/app/ios_app.dart';
-import 'package:nashik/core/dependency_injection/get_it.dart';
+import 'package:nashik/android_app.dart';
+import 'package:nashik/ios_app.dart';
+import 'package:nashik/core/di/get_it.dart';
 import 'package:nashik/core/infrastructure/env/config.dart';
 import 'package:nashik/core/infrastructure/supabase/config.dart';
 
