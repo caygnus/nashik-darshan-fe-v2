@@ -72,7 +72,6 @@ class ProfilePage extends StatelessWidget {
           loading: () {},
           authenticated: (_) {},
           unauthenticated: () {
-            // Navigate to login page after logout
             context.goNamed(LoginPage.routeName);
           },
           error: (String message) {
@@ -90,8 +89,13 @@ class ProfilePage extends StatelessWidget {
             isLoading: isLoading,
             message: isLoading ? 'Logging out...' : null,
             child: Scaffold(
-              backgroundColor: Colors.white,
+              backgroundColor: const Color(0xFFF5F5F5),
               appBar: AppBar(
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  color: AppColors.darkText,
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
                 title: Text(
                   'Profile',
                   style: TextStyle(
@@ -100,9 +104,16 @@ class ProfilePage extends StatelessWidget {
                     color: AppColors.darkText,
                   ),
                 ),
+                centerTitle: true,
                 backgroundColor: Colors.white,
                 elevation: 0,
-                centerTitle: true,
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.favorite_border),
+                    color: AppColors.darkText,
+                    onPressed: () {},
+                  ),
+                ],
               ),
               body: SafeArea(
                 child: BlocBuilder<AuthCubit, AuthState>(
@@ -125,390 +136,763 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildProfileContent(BuildContext context, User user) {
-    String formatDate(DateTime date) {
-      final months = [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
-      ];
-      final month = months[date.month - 1];
-      final day = date.day.toString().padLeft(2, '0');
-      final year = date.year;
-      final hour = date.hour > 12
-          ? date.hour - 12
-          : (date.hour == 0 ? 12 : date.hour);
-      final minute = date.minute.toString().padLeft(2, '0');
-      final period = date.hour >= 12 ? 'PM' : 'AM';
-      return '$month $day, $year • $hour:$minute $period';
-    }
+    // Mock data
+    const templesVisited = 12;
+    const spotsExplored = 8;
+    const tripsCompleted = 5;
+    const savedItineraries = 5;
+    const wishlistPlaces = 10;
+    const jyotirlingasVisited = 3;
+    const totalJyotirlingas = 12;
+    const badgesEarned = 2;
+    const dishesTried = 7;
+    const totalDishes = 10;
+    const greenPoints = 850;
+    const tripStreak = 7;
+    const streakProgress = 0.75;
+
+    final recentTrips = [
+      {
+        'name': 'Trimbakeshwar Temple',
+        'date': 'Aug 15, 2024',
+        'image': Icons.temple_buddhist,
+      },
+      {
+        'name': 'Sula Vineyards',
+        'date': 'Jul 28, 2024',
+        'image': Icons.wine_bar,
+      },
+      {
+        'name': 'Pandav Leni Caves',
+        'date': 'Jul 10, 2024',
+        'image': Icons.landscape,
+      },
+    ];
 
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 20.h),
-          // Profile Header Card
+          // Profile Header
           Container(
-            padding: EdgeInsets.all(24.w),
+            padding: EdgeInsets.all(20.w),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16.r),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 2),
-                ),
-              ],
             ),
-            child: Column(
+            child: Row(
               children: [
                 // Profile Avatar
                 Container(
-                  width: 100.w,
-                  height: 100.w,
+                  width: 80.w,
+                  height: 80.w,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: AppColors.primary.withValues(alpha: 0.1),
-                    border: Border.all(color: AppColors.primary, width: 3),
+                    border: Border.all(color: AppColors.primary, width: 2),
                   ),
                   child: Icon(
                     Icons.person,
-                    size: 50.sp,
+                    size: 40.sp,
                     color: AppColors.primary,
                   ),
                 ),
-                SizedBox(height: 16.h),
-                // User Name
+                SizedBox(width: 16.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        user.name,
+                        style: TextStyle(
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.darkText,
+                        ),
+                      ),
+                      SizedBox(height: 4.h),
+                      Text(
+                        'Spiritual Explorer',
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 8.h),
+                      Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 8.w,
+                              vertical: 4.h,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.green.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.flag,
+                                  size: 14.sp,
+                                  color: Colors.green,
+                                ),
+                                SizedBox(width: 4.w),
+                                Text(
+                                  'Marathi',
+                                  style: TextStyle(
+                                    fontSize: 12.sp,
+                                    color: Colors.green,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 8.w),
+                          Text(
+                            user.phone ?? '+91 98765 43210',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: AppColors.grey,
+                            ),
+                          ),
+                          SizedBox(width: 4.w),
+                          Icon(
+                            Icons.edit,
+                            size: 16.sp,
+                            color: AppColors.primary,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 16.h),
+
+          // Travel Stats Card
+          Container(
+            padding: EdgeInsets.all(20.w),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16.r),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 Text(
-                  user.name,
+                  'Travel Stats',
                   style: TextStyle(
-                    fontSize: 24.sp,
+                    fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
                     color: AppColors.darkText,
                   ),
                 ),
-                SizedBox(height: 8.h),
-                // User Email
+                SizedBox(height: 16.h),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Icon(
-                      Icons.email_outlined,
-                      size: 16.sp,
-                      color: AppColors.grey,
+                    _buildStatItem(
+                      icon: Icons.temple_buddhist,
+                      count: templesVisited,
+                      label: 'Temples Visited',
+                      color: AppColors.primary,
                     ),
-                    SizedBox(width: 6.w),
-                    Text(
-                      user.email,
-                      style: TextStyle(fontSize: 14.sp, color: AppColors.grey),
+                    _buildStatItem(
+                      icon: Icons.landscape,
+                      count: spotsExplored,
+                      label: 'Spots Explored',
+                      color: Colors.green,
+                    ),
+                    _buildStatItem(
+                      icon: Icons.luggage,
+                      count: tripsCompleted,
+                      label: 'Trips Completed',
+                      color: Colors.blue,
                     ),
                   ],
                 ),
-                if (user.phone != null && user.phone!.isNotEmpty) ...[
-                  SizedBox(height: 8.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.phone_outlined,
-                        size: 16.sp,
-                        color: AppColors.grey,
+              ],
+            ),
+          ),
+          SizedBox(height: 16.h),
+
+          // Recent Trips Card
+          Container(
+            padding: EdgeInsets.all(20.w),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16.r),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Recent Trips',
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.darkText,
                       ),
-                      SizedBox(width: 6.w),
-                      Text(
-                        user.phone!,
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        'View All',
                         style: TextStyle(
                           fontSize: 14.sp,
-                          color: AppColors.grey,
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                    ],
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12.h),
+                ...recentTrips.map(
+                  (trip) => _buildTripItem(
+                    name: trip['name'] as String,
+                    date: trip['date'] as String,
+                    icon: trip['image'] as IconData,
                   ),
-                ],
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 16.h),
+
+          // Saved & Wishlist Card
+          Container(
+            padding: EdgeInsets.all(20.w),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16.r),
+            ),
+            child: Column(
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  height: 56.h,
+                  child: ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: Icon(Icons.bookmark, color: Colors.white),
+                    label: Text(
+                      '$savedItineraries Saved Itineraries',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.purple,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 12.h),
+                SizedBox(
+                  width: double.infinity,
+                  height: 56.h,
+                  child: ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: Icon(Icons.favorite, color: Colors.white),
+                    label: Text(
+                      '$wishlistPlaces Wishlist Places',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.pink,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 16.h),
+
+          // Nashik Journey Card
+          Container(
+            padding: EdgeInsets.all(20.w),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16.r),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Nashik Journey',
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.darkText,
+                  ),
+                ),
                 SizedBox(height: 16.h),
-                // Role Badge
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 12.w,
-                    vertical: 6.h,
+                _buildJourneyItem(
+                  icon: Icons.temple_buddhist,
+                  label: 'Pilgrimage Tracker',
+                  subtitle:
+                      '$jyotirlingasVisited of $totalJyotirlingas Jyotirlingas visited',
+                  progress: jyotirlingasVisited / totalJyotirlingas,
+                  progressText:
+                      '${((jyotirlingasVisited / totalJyotirlingas) * 100).toInt()}%',
+                  iconColor: AppColors.primary,
+                ),
+                SizedBox(height: 16.h),
+                _buildJourneyItem(
+                  icon: Icons.emoji_events,
+                  label: 'Festival Badges',
+                  subtitle: '$badgesEarned badges earned',
+                  badges: List.generate(badgesEarned, (index) => Colors.amber),
+                  iconColor: Colors.amber,
+                ),
+                SizedBox(height: 16.h),
+                _buildJourneyItem(
+                  icon: Icons.restaurant,
+                  label: 'Food Journey',
+                  subtitle: '$dishesTried local dishes tried',
+                  progress: dishesTried / totalDishes,
+                  progressText:
+                      '${((dishesTried / totalDishes) * 100).toInt()}%',
+                  iconColor: Colors.red,
+                ),
+                SizedBox(height: 16.h),
+                _buildJourneyItem(
+                  icon: Icons.eco,
+                  label: 'Green Points',
+                  subtitle: 'Eco-friendly travel score',
+                  points: greenPoints,
+                  iconColor: Colors.green,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 16.h),
+
+          // Achievements Card
+          Container(
+            padding: EdgeInsets.all(20.w),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16.r),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Achievements',
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.darkText,
                   ),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(20.r),
-                  ),
-                  child: Text(
-                    user.role.toUpperCase(),
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w600,
+                ),
+                SizedBox(height: 16.h),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _buildAchievementBadge(
+                      icon: Icons.workspace_premium,
+                      label: 'Temple Explorer',
+                      color: Colors.amber,
+                    ),
+                    _buildAchievementBadge(
+                      icon: Icons.restaurant,
+                      label: 'Foodie',
                       color: AppColors.primary,
                     ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 24.h),
-
-          // Personal Information Section
-          Text(
-            'Personal Information',
-            style: TextStyle(
-              fontSize: 18.sp,
-              fontWeight: FontWeight.bold,
-              color: AppColors.darkText,
-            ),
-          ),
-          SizedBox(height: 12.h),
-          Container(
-            padding: EdgeInsets.all(20.w),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16.r),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                _buildInfoRow(
-                  icon: Icons.person_outline,
-                  label: 'Name',
-                  value: user.name,
-                ),
-                Divider(height: 24.h),
-                _buildInfoRow(
-                  icon: Icons.email_outlined,
-                  label: 'Email',
-                  value: user.email,
-                ),
-                if (user.phone != null && user.phone!.isNotEmpty) ...[
-                  Divider(height: 24.h),
-                  _buildInfoRow(
-                    icon: Icons.phone_outlined,
-                    label: 'Phone',
-                    value: user.phone!,
-                  ),
-                ],
-                Divider(height: 24.h),
-                _buildInfoRow(
-                  icon: Icons.badge_outlined,
-                  label: 'Role',
-                  value: user.role,
-                ),
-                Divider(height: 24.h),
-                _buildInfoRow(
-                  icon: Icons.info_outline,
-                  label: 'Status',
-                  value: user.status,
-                  valueColor: _getStatusColor(user.status),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 24.h),
-
-          // Account Information Section
-          Text(
-            'Account Information',
-            style: TextStyle(
-              fontSize: 18.sp,
-              fontWeight: FontWeight.bold,
-              color: AppColors.darkText,
-            ),
-          ),
-          SizedBox(height: 12.h),
-          Container(
-            padding: EdgeInsets.all(20.w),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16.r),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                _buildInfoRow(
-                  icon: Icons.fingerprint_outlined,
-                  label: 'User ID',
-                  value: user.id,
-                  isMonospace: true,
-                ),
-                Divider(height: 24.h),
-                _buildInfoRow(
-                  icon: Icons.calendar_today_outlined,
-                  label: 'Member Since',
-                  value: formatDate(user.createdAt),
-                ),
-                Divider(height: 24.h),
-                _buildInfoRow(
-                  icon: Icons.update_outlined,
-                  label: 'Last Updated',
-                  value: formatDate(user.updatedAt),
-                ),
-              ],
-            ),
-          ),
-
-          // Metadata Section (if available)
-          if (user.metadata != null && user.metadata!.isNotEmpty) ...[
-            SizedBox(height: 24.h),
-            Text(
-              'Additional Information',
-              style: TextStyle(
-                fontSize: 18.sp,
-                fontWeight: FontWeight.bold,
-                color: AppColors.darkText,
-              ),
-            ),
-            SizedBox(height: 12.h),
-            Container(
-              padding: EdgeInsets.all(20.w),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16.r),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  ...user.metadata!.entries.toList().asMap().entries.map((
-                    mapEntry,
-                  ) {
-                    final entry = mapEntry.value;
-                    final index = mapEntry.key;
-                    final isLast = index == user.metadata!.length - 1;
-                    return Column(
-                      children: [
-                        _buildInfoRow(
-                          icon: Icons.data_object_outlined,
-                          label: entry.key,
-                          value: entry.value,
-                        ),
-                        if (!isLast) Divider(height: 24.h),
-                      ],
-                    );
-                  }),
-                ],
-              ),
-            ),
-          ],
-
-          SizedBox(height: 32.h),
-          // Logout Button
-          SizedBox(
-            width: double.infinity,
-            height: 50.h,
-            child: OutlinedButton(
-              onPressed: () => _handleLogout(context),
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: AppColors.red, width: 1.5),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
-                backgroundColor: Colors.white,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.logout, color: AppColors.red, size: 20.sp),
-                  SizedBox(width: 8.w),
-                  Text(
-                    'Logout',
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.red,
+                    _buildAchievementBadge(
+                      icon: Icons.eco,
+                      label: 'Eco Traveler',
+                      color: Colors.green,
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+              ],
             ),
           ),
-          SizedBox(height: 24.h),
+          SizedBox(height: 16.h),
+
+          // Settings Card
+          Container(
+            padding: EdgeInsets.all(20.w),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16.r),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Settings',
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.darkText,
+                  ),
+                ),
+                SizedBox(height: 12.h),
+                _buildSettingItem(Icons.privacy_tip, 'Privacy Settings'),
+                _buildSettingItem(
+                  Icons.language,
+                  'Language',
+                  subtitle: 'English',
+                ),
+                _buildSettingItem(Icons.accessibility, 'Accessibility'),
+                _buildSettingItem(Icons.download, 'Export Data'),
+                _buildSettingItem(
+                  Icons.delete_outline,
+                  'Delete Account',
+                  textColor: AppColors.red,
+                ),
+                SizedBox(height: 8.h),
+                _buildSettingItem(
+                  Icons.logout,
+                  'Logout',
+                  textColor: AppColors.red,
+                  onTap: () => _handleLogout(context),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 16.h),
+
+          // Trip Streak Card
+          Container(
+            padding: EdgeInsets.all(20.w),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  AppColors.primary,
+                  AppColors.primary.withValues(alpha: 0.8),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(16.r),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Trip Streak',
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      '$tripStreak Days',
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  'Keep exploring Nashik!',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    color: Colors.white.withValues(alpha: 0.9),
+                  ),
+                ),
+                SizedBox(height: 12.h),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4.r),
+                        child: LinearProgressIndicator(
+                          value: streakProgress,
+                          backgroundColor: Colors.white.withValues(alpha: 0.3),
+                          valueColor: const AlwaysStoppedAnimation<Color>(
+                            Colors.white,
+                          ),
+                          minHeight: 8.h,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 12.w),
+                    Text(
+                      '${(streakProgress * 100).toInt()}%',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 16.h),
         ],
       ),
     );
   }
 
-  Widget _buildInfoRow({
+  Widget _buildStatItem({
     required IconData icon,
+    required int count,
     required String label,
-    required String value,
-    Color? valueColor,
-    bool isMonospace = false,
+    required Color color,
   }) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
       children: [
-        Icon(icon, size: 20.sp, color: AppColors.grey),
-        SizedBox(width: 12.w),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  color: AppColors.grey,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(height: 4.h),
-              Text(
-                value,
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  color: valueColor ?? AppColors.darkText,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: isMonospace ? 'monospace' : null,
-                ),
-              ),
-            ],
+        Container(
+          width: 60.w,
+          height: 60.w,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: color.withValues(alpha: 0.1),
           ),
+          child: Icon(icon, color: color, size: 30.sp),
+        ),
+        SizedBox(height: 8.h),
+        Text(
+          count.toString(),
+          style: TextStyle(
+            fontSize: 20.sp,
+            fontWeight: FontWeight.bold,
+            color: AppColors.darkText,
+          ),
+        ),
+        SizedBox(height: 4.h),
+        Text(
+          label,
+          style: TextStyle(fontSize: 12.sp, color: AppColors.grey),
+          textAlign: TextAlign.center,
         ),
       ],
     );
   }
 
-  Color _getStatusColor(String status) {
-    switch (status.toLowerCase()) {
-      case 'published':
-      case 'active':
-        return Colors.green;
-      case 'pending':
-        return Colors.orange;
-      case 'inactive':
-      case 'deleted':
-        return Colors.red;
-      default:
-        return AppColors.darkText;
-    }
+  Widget _buildTripItem({
+    required String name,
+    required String date,
+    required IconData icon,
+  }) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 12.h),
+      child: Row(
+        children: [
+          Container(
+            width: 60.w,
+            height: 60.w,
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12.r),
+            ),
+            child: Icon(icon, color: AppColors.primary, size: 30.sp),
+          ),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.darkText,
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Text(
+                  date,
+                  style: TextStyle(fontSize: 14.sp, color: AppColors.grey),
+                ),
+              ],
+            ),
+          ),
+          Icon(Icons.chevron_right, color: AppColors.grey),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildJourneyItem({
+    required IconData icon,
+    required String label,
+    required String subtitle,
+    double? progress,
+    String? progressText,
+    int? points,
+    List<Color>? badges,
+    required Color iconColor,
+  }) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Icon(icon, color: iconColor, size: 24.sp),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.darkText,
+                    ),
+                  ),
+                  SizedBox(height: 4.h),
+                  Text(
+                    subtitle,
+                    style: TextStyle(fontSize: 14.sp, color: AppColors.grey),
+                  ),
+                ],
+              ),
+            ),
+            if (progress != null && progressText != null)
+              Text(
+                progressText,
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.darkText,
+                ),
+              )
+            else if (points != null)
+              Text(
+                points.toString(),
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green,
+                ),
+              )
+            else if (badges != null)
+              Row(
+                children: badges
+                    .map(
+                      (color) => Container(
+                        margin: EdgeInsets.only(left: 4.w),
+                        width: 24.w,
+                        height: 24.w,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: color,
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+          ],
+        ),
+        if (progress != null) ...[
+          SizedBox(height: 8.h),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4.r),
+            child: LinearProgressIndicator(
+              value: progress,
+              backgroundColor: iconColor.withValues(alpha: 0.1),
+              valueColor: AlwaysStoppedAnimation<Color>(iconColor),
+              minHeight: 6.h,
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildAchievementBadge({
+    required IconData icon,
+    required String label,
+    required Color color,
+  }) {
+    return Column(
+      children: [
+        Container(
+          width: 70.w,
+          height: 70.w,
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(16.r),
+          ),
+          child: Icon(icon, color: color, size: 35.sp),
+        ),
+        SizedBox(height: 8.h),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w500,
+            color: AppColors.darkText,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSettingItem(
+    IconData icon,
+    String title, {
+    String? subtitle,
+    Color? textColor,
+    VoidCallback? onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: EdgeInsets.only(bottom: 16.h),
+        child: Row(
+          children: [
+            Icon(icon, color: textColor ?? AppColors.grey, size: 24.sp),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  color: textColor ?? AppColors.darkText,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            if (subtitle != null)
+              Text(
+                subtitle,
+                style: TextStyle(fontSize: 14.sp, color: AppColors.grey),
+              ),
+            SizedBox(width: 8.w),
+            Icon(Icons.chevron_right, color: AppColors.grey, size: 20.sp),
+          ],
+        ),
+      ),
+    );
   }
 }
