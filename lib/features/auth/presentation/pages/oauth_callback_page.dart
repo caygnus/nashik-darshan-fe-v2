@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nashik/core/di/get_it.dart';
 import 'package:nashik/core/error/failures/server_failure.dart';
 import 'package:nashik/core/supabase/config.dart';
 import 'package:nashik/features/auth/domain/dtos/signup_request.dart';
 import 'package:nashik/features/auth/domain/repositories/auth_repository.dart';
+import 'package:nashik/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:nashik/features/auth/presentation/pages/login_page.dart';
 import 'package:nashik/features/home/presentation/pages/home_screen.dart';
 
@@ -40,6 +42,7 @@ class _OAuthCallbackPageState extends State<OAuthCallbackPage> {
       await _handleNewOAuthUserSignup();
 
       if (mounted) {
+        context.read<AuthCubit>().loadCurrentUser();
         context.goNamed(HomeScreen.routeName);
       }
     } catch (e) {
@@ -70,11 +73,14 @@ class _OAuthCallbackPageState extends State<OAuthCallbackPage> {
       final getUserResult = await authRepository.getCurrentUser();
 
       await getUserResult.fold((failure) async {
+        final message = failure.message.toLowerCase();
         final isNotFound =
-            failure is ServerFailure && failure.statusCode == 404 ||
-            failure.message.toLowerCase().contains('not found') ||
-            (failure.message.toLowerCase().contains('user') &&
-                failure.message.toLowerCase().contains('not found'));
+            (failure is ServerFailure &&
+                (failure.statusCode == 404 ||
+                    (failure.statusCode == 500 &&
+                        message.contains('not found')))) ||
+            message.contains('not found') ||
+            (message.contains('user') && message.contains('not found'));
 
         if (isNotFound) {
           final email = supabaseUser.email;

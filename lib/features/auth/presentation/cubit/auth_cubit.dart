@@ -1,11 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nashik/core/auth/google_auth_service.dart';
 import 'package:nashik/core/deep_link/deep_link_service.dart';
+import 'package:nashik/core/router/app_router.dart';
 import 'package:nashik/core/supabase/config.dart';
 import 'package:nashik/features/auth/domain/usecases/get_current_user.dart';
 import 'package:nashik/features/auth/domain/usecases/signin_with_email.dart';
 import 'package:nashik/features/auth/domain/usecases/signup_with_email.dart';
 import 'package:nashik/features/auth/presentation/cubit/auth_state.dart';
+import 'package:nashik/features/auth/presentation/pages/oauth_callback_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 
 class AuthCubit extends Cubit<AuthState> {
@@ -33,7 +35,14 @@ class AuthCubit extends Cubit<AuthState> {
       final Session? session = data.session;
 
       if (event == AuthChangeEvent.signedIn && session != null) {
-        _loadCurrentUser();
+        try {
+          final currentLocation = Approuter.router.location;
+          if (!currentLocation.contains(OAuthCallbackPage.routePath)) {
+            _loadCurrentUser();
+          }
+        } catch (e) {
+          _loadCurrentUser();
+        }
       } else if (event == AuthChangeEvent.signedOut) {
         emit(const AuthState.unauthenticated());
       }
@@ -53,6 +62,10 @@ class AuthCubit extends Cubit<AuthState> {
       (failure) => emit(AuthState.error(failure.message)),
       (user) => emit(AuthState.authenticated(user)),
     );
+  }
+
+  void loadCurrentUser() {
+    _loadCurrentUser();
   }
 
   Future<void> signUpWithEmail({

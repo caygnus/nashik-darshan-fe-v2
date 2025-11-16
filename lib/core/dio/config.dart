@@ -224,11 +224,21 @@ class DioClient {
         responseData = e.response?.data;
         String message;
         if (responseData is Map) {
-          message =
-              responseData['errorMsg'] as String? ??
-              responseData['message'] as String? ??
-              responseData['error'] as String? ??
-              'Server error occurred';
+          final errorObj = responseData['error'];
+          if (errorObj is Map) {
+            message =
+                errorObj['message'] as String? ??
+                errorObj['errorMsg'] as String? ??
+                responseData['errorMsg'] as String? ??
+                responseData['message'] as String? ??
+                'Server error occurred';
+          } else {
+            message =
+                responseData['errorMsg'] as String? ??
+                responseData['message'] as String? ??
+                errorObj?.toString() ??
+                'Server error occurred';
+          }
         } else if (responseData is String) {
           message = responseData;
         } else {

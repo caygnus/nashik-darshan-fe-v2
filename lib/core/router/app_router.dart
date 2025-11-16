@@ -1,6 +1,8 @@
+import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nashik/core/pages/bottom_bar_page.dart';
+import 'package:nashik/core/pages/deep_link_handler_page.dart';
 import 'package:nashik/core/supabase/config.dart';
 import 'package:nashik/features/auth/presentation/pages/login_page.dart';
 import 'package:nashik/features/auth/presentation/pages/oauth_callback_page.dart';
@@ -15,11 +17,64 @@ import 'package:nashik/features/profile/presentation/pages/profile_page.dart';
 import 'package:nashik/features/street_food/presentation/pages/street_food_screen.dart';
 import 'package:nashik/features/transport/presentation/pages/transport_screen.dart';
 
+class RouteObserver extends NavigatorObserver {
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    super.didPush(route, previousRoute);
+    _logRouteChange('PUSH', route, previousRoute);
+  }
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    super.didPop(route, previousRoute);
+    _logRouteChange('POP', route, previousRoute);
+  }
+
+  @override
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
+    super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
+    _logRouteChange('REPLACE', newRoute, oldRoute);
+  }
+
+  @override
+  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    super.didRemove(route, previousRoute);
+    _logRouteChange('REMOVE', route, previousRoute);
+  }
+
+  void _logRouteChange(
+    String action,
+    Route<dynamic>? currentRoute,
+    Route<dynamic>? previousRoute,
+  ) {
+    final currentName = currentRoute?.settings.name ?? 'Unknown';
+    final previousName = previousRoute?.settings.name ?? 'None';
+    final currentPath = _getRoutePath(currentRoute);
+    final previousPath = _getRoutePath(previousRoute);
+
+    developer.log(
+      'Route $action: $previousName ($previousPath) → $currentName ($currentPath)',
+      name: 'Router',
+    );
+  }
+
+  String _getRoutePath(Route<dynamic>? route) {
+    if (route?.settings.arguments is Map) {
+      final args = route!.settings.arguments as Map;
+      if (args.containsKey('uri')) {
+        return args['uri'].toString();
+      }
+    }
+    return route?.settings.name ?? route?.toString() ?? 'Unknown';
+  }
+}
+
 class Approuter {
   static final Approuter _instance = Approuter.init();
 
   static final instance = _instance;
   static late final GoRouter router;
+  static final RouteObserver _routeObserver = RouteObserver();
 
   static final GlobalKey<NavigatorState> parentNavigatorKey =
       GlobalKey<NavigatorState>();
@@ -135,14 +190,15 @@ class Approuter {
         pageBuilder: (context, state) =>
             getPage(child: const OAuthCallbackPage(), state: state),
       ),
-      // Catch-all route for unmatched paths (not deep links)
-      // Deep links are handled by DeepLinkService and prevented in handleRedirect
+      GoRoute(
+        path: DeepLinkHandlerPage.routePath,
+        name: DeepLinkHandlerPage.routeName,
+        pageBuilder: (context, state) =>
+            getPage(child: const DeepLinkHandlerPage(), state: state),
+      ),
       GoRoute(
         path: '/:path(.*)',
         pageBuilder: (context, state) {
-          // For unmatched routes, redirect to home via the redirect handler
-          // This route should never actually be shown because handleRedirect
-          // will redirect unmatched routes to home before this page is built
           return getPage(child: const HomeScreen(), state: state);
         },
       ),
@@ -152,10 +208,30 @@ class Approuter {
       navigatorKey: parentNavigatorKey,
       routes: routes,
       redirect: handleRedirect,
+      observers: [_routeObserver],
+      debugLogDiagnostics: true,
     );
+
+    _setupRouteChangeLogging();
   }
   static Page getPage({required Widget child, required GoRouterState state}) {
-    return MaterialPage(key: state.pageKey, child: child);
+    return MaterialPage(
+      key: state.pageKey,
+      child: child,
+      name: state.uri.toString(),
+      arguments: {'uri': state.uri},
+    );
+  }
+
+  static void _setupRouteChangeLogging() {
+    router.routerDelegate.addListener(() {
+      try {
+        final location = router.location;
+        developer.log('Route changed to: $location', name: 'Router');
+      } catch (e) {
+        // Ignore errors during route change logging
+      }
+    });
   }
 }
 
@@ -180,27 +256,29 @@ final List<String> protectedRoutes = [ProfilePage.routePath];
 String? handleRedirect(BuildContext context, GoRouterState state) {
   final uri = state.uri;
   final path = uri.path;
+  final fullUri = uri.toString();
 
-  if (uri.scheme == 'com.caygnus.nashikdarshan' &&
-      (uri.pathSegments.contains('login-callback') ||
-          uri.pathSegments.contains('auth-callback'))) {
-    final callbackUri = Uri(
-      path: OAuthCallbackPage.routePath,
-      queryParameters: {'deep_link': uri.toString()},
-    );
-    return callbackUri.toString();
-  }
+  developer.log('Redirect check: $fullUri (path: $path)', name: 'Router');
 
   if (uri.scheme == 'com.caygnus.nashikdarshan') {
-    final currentLocation = state.matchedLocation.isNotEmpty
-        ? state.matchedLocation
-        : HomeScreen.routePath;
-    return currentLocation;
+    final handlerUri = Uri(
+      path: DeepLinkHandlerPage.routePath,
+      queryParameters: {'deep_link': uri.toString()},
+    );
+    developer.log(
+      'Redirect: Deep link → ${handlerUri.toString()}',
+      name: 'Router',
+    );
+    return handlerUri.toString();
   }
 
   final user = SupabaseConfig.client.auth.currentUser;
 
   if (user == null && protectedRoutes.contains(path)) {
+    developer.log(
+      'Redirect: Protected route without auth → ${LoginPage.routePath}',
+      name: 'Router',
+    );
     return LoginPage.routePath;
   }
 
