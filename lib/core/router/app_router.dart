@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nashik/core/pages/bottom_bar_page.dart';
+import 'package:nashik/core/pages/deep_link_test_page.dart';
 import 'package:nashik/core/supabase/config.dart';
 import 'package:nashik/features/auth/presentation/pages/login_page.dart';
 import 'package:nashik/features/auth/presentation/pages/oauth_callback_page.dart';
@@ -139,6 +140,12 @@ class Approuter {
             getPage(child: const OAuthCallbackPage(), state: state),
       ),
       GoRoute(
+        path: DeepLinkTestPage.routePath,
+        name: DeepLinkTestPage.routeName,
+        pageBuilder: (context, state) =>
+            getPage(child: const DeepLinkTestPage(), state: state),
+      ),
+      GoRoute(
         path: '/:path(.*)',
         pageBuilder: (context, state) {
           return getPage(child: const HomeScreen(), state: state);
@@ -183,9 +190,65 @@ extension GoRouterExtension on GoRouter {
 
 final List<String> protectedRoutes = [ProfilePage.routePath];
 
+enum DeepLinkType {
+  oauthCallback,
+  test,
+  unknown;
+
+  static DeepLinkType fromUri(Uri uri) {
+    if (uri.scheme != 'com.caygnus.nashikdarshan') {
+      return DeepLinkType.unknown;
+    }
+
+    final host = uri.host.toLowerCase();
+    final path = uri.path.toLowerCase();
+
+    // OAuth callback deep links
+    if (host == 'login-callback' ||
+        host == 'auth-callback' ||
+        path == '/login-callback' ||
+        path == '/auth-callback') {
+      return DeepLinkType.oauthCallback;
+    }
+
+    // Test deep link
+    if (host == 'test' || path == '/test') {
+      return DeepLinkType.test;
+    }
+
+    return DeepLinkType.unknown;
+  }
+
+  String? getRoutePath(Uri originalUri) {
+    switch (this) {
+      case DeepLinkType.oauthCallback:
+        // For OAuth, pass the full deep link URI as a query parameter
+        // This preserves all query params from the original deep link
+        return Uri(
+          path: OAuthCallbackPage.routePath,
+          queryParameters: {'deep_link': originalUri.toString()},
+        ).toString();
+      case DeepLinkType.test:
+        // For test page, pass all query parameters from the deep link
+        return Uri(
+          path: DeepLinkTestPage.routePath,
+          queryParameters: originalUri.queryParameters,
+        ).toString();
+      case DeepLinkType.unknown:
+        return HomeScreen.routePath;
+    }
+  }
+}
+
 String? handleRedirect(BuildContext context, GoRouterState state) {
   final uri = state.uri;
   final path = uri.path;
+
+  // Handle deep links with custom scheme
+  if (uri.scheme == 'com.caygnus.nashikdarshan') {
+    final deepLinkType = DeepLinkType.fromUri(uri);
+    return deepLinkType.getRoutePath(uri);
+  }
 
   // Handle protected routes
   final user = SupabaseConfig.client.auth.currentUser;

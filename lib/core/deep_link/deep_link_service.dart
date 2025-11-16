@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/foundation.dart';
 import 'package:nashik/core/router/app_router.dart';
-import 'package:nashik/features/auth/presentation/pages/oauth_callback_page.dart';
 
 class DeepLinkService {
   static final DeepLinkService _instance = DeepLinkService._internal();
@@ -26,28 +25,15 @@ class DeepLinkService {
       return;
     }
 
-    final host = uri.host.toLowerCase();
-    final path = uri.path.toLowerCase();
+    final deepLinkType = DeepLinkType.fromUri(uri);
+    final routePath = deepLinkType.getRoutePath(uri);
 
-    // Map deep links directly to pages
-    if (host == 'login-callback' ||
-        host == 'auth-callback' ||
-        path.contains('login-callback') ||
-        path.contains('auth-callback')) {
-      // OAuth callback
-      final callbackUri = Uri(
-        path: OAuthCallbackPage.routePath,
-        queryParameters: uri.queryParameters,
-      );
-      Approuter.router.go(callbackUri.toString());
-      return;
+    if (routePath != null) {
+      if (deepLinkType == DeepLinkType.test) {
+        debugPrint('✅ Test deep link received! Deep linking is working.');
+      }
+      Approuter.router.go(routePath);
     }
-
-    // Add more deep link mappings here as needed
-    // Example:
-    // if (host == 'verify-email') {
-    //   Approuter.router.goNamed(EmailVerificationPage.routeName, ...);
-    // }
   }
 
   Future<Uri?> getInitialLink() async {
