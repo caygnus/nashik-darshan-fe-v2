@@ -6,8 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nashik/android_app.dart';
 import 'package:nashik/ios_app.dart';
 import 'package:nashik/core/di/get_it.dart';
-import 'package:nashik/core/infrastructure/env/config.dart';
-import 'package:nashik/core/infrastructure/supabase/config.dart';
+import 'package:nashik/core/env/config.dart';
+import 'package:nashik/core/supabase/config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

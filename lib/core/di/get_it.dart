@@ -1,6 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
-import 'package:nashik/core/infrastructure/dio/config.dart';
+import 'package:nashik/core/dio/config.dart';
 
 final locator = GetIt.instance;
 
