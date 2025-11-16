@@ -1,208 +1,141 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nashik/core/di/get_it.dart';
-import 'package:nashik/core/error/failures/server_failure.dart';
-import 'package:nashik/core/supabase/config.dart';
-import 'package:nashik/features/auth/domain/dtos/signup_request.dart';
-import 'package:nashik/features/auth/domain/repositories/auth_repository.dart';
-import 'package:nashik/features/auth/presentation/cubit/auth_cubit.dart';
-import 'package:nashik/features/auth/presentation/pages/login_page.dart';
 import 'package:nashik/features/home/presentation/pages/home_screen.dart';
 
-class OAuthCallbackPage extends StatefulWidget {
+class OAuthCallbackPage extends StatelessWidget {
   const OAuthCallbackPage({super.key});
 
   static const routeName = 'OAuthCallbackPage';
   static const routePath = '/oauth-callback';
 
   @override
-  State<OAuthCallbackPage> createState() => _OAuthCallbackPageState();
-}
-
-class _OAuthCallbackPageState extends State<OAuthCallbackPage> {
-  bool _isProcessing = true;
-  String? _errorMessage;
-  bool _hasHandledCallback = false;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_hasHandledCallback) {
-      _hasHandledCallback = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _handleOAuthCallback();
-      });
-    }
-  }
-
-  Future<void> _handleOAuthCallback() async {
-    try {
-      final routeState = GoRouterState.of(context);
-      final deepLinkParam = routeState.uri.queryParameters['deep_link'];
-      final uri = deepLinkParam != null
-          ? Uri.parse(deepLinkParam)
-          : routeState.uri;
-
-      await SupabaseConfig.client.auth.getSessionFromUrl(uri);
-      await _handleNewOAuthUserSignup();
-
-      if (mounted) {
-        context.read<AuthCubit>().loadCurrentUser();
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted) {
-            context.goNamed(HomeScreen.routeName);
-          }
-        });
-      }
-    } catch (e) {
-      debugPrint('OAuth callback error: $e');
-      if (mounted) {
-        setState(() {
-          _isProcessing = false;
-          _errorMessage = 'Failed to complete sign in: ${e.toString()}';
-        });
-      }
-    }
-  }
-
-  Future<void> _handleNewOAuthUserSignup() async {
-    try {
-      final authRepository = locator<AuthRepository>();
-      final supabaseUser = SupabaseConfig.client.auth.currentUser;
-
-      if (supabaseUser == null) {
-        throw Exception('No authenticated user found after OAuth callback');
-      }
-
-      final session = SupabaseConfig.client.auth.currentSession;
-      if (session == null || session.accessToken.isEmpty) {
-        throw Exception('No access token available after OAuth callback');
-      }
-
-      final getUserResult = await authRepository.getCurrentUser();
-
-      await getUserResult.fold((failure) async {
-        final message = failure.message.toLowerCase();
-        final isNotFound =
-            (failure is ServerFailure &&
-                (failure.statusCode == 404 ||
-                    (failure.statusCode == 500 &&
-                        message.contains('not found')))) ||
-            message.contains('not found') ||
-            (message.contains('user') && message.contains('not found'));
-
-        if (isNotFound) {
-          final email = supabaseUser.email;
-          final name =
-              supabaseUser.userMetadata?['full_name'] as String? ??
-              supabaseUser.userMetadata?['name'] as String? ??
-              supabaseUser.userMetadata?['display_name'] as String? ??
-              email?.split('@').first ??
-              'User';
-          final phone = supabaseUser.phone;
-
-          if (email == null) {
-            throw Exception('Missing email for OAuth user signup');
-          }
-
-          final signupRequest = SignupRequest(
-            email: email,
-            name: name,
-            phone: phone,
-            accessToken: session.accessToken,
-          );
-
-          final signupResult = await authRepository.signup(signupRequest);
-
-          signupResult.fold((signupFailure) {
-            throw Exception('Backend signup failed: ${signupFailure.message}');
-          }, (_) {});
-        } else {
-          throw Exception('Error getting current user: ${failure.message}');
-        }
-      }, (_) {});
-    } catch (e) {
-      debugPrint('Error handling new OAuth user signup: $e');
-      rethrow;
-    }
-  }
-
-  void _handleRetry() {
-    setState(() {
-      _isProcessing = true;
-      _errorMessage = null;
-    });
-    _handleOAuthCallback();
-  }
-
-  void _handleGoToLogin() {
-    context.goNamed(LoginPage.routeName);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // Get query parameters from the route
+    final routeState = GoRouterState.of(context);
+    final deepLinkParam = routeState.uri.queryParameters['deep_link'];
+    final originalUri = deepLinkParam != null
+        ? Uri.parse(deepLinkParam)
+        : routeState.uri;
+    final queryParams = originalUri.queryParameters;
+
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text('OAuth Callback'),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+      ),
       body: SafeArea(
         child: Center(
-          child: _isProcessing
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const CircularProgressIndicator(),
-                    const SizedBox(height: 24),
-                    Text(
-                      'Completing sign in...',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ],
-                )
-              : _errorMessage != null
-              ? Padding(
-                  padding: const EdgeInsets.all(24.0),
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.check_circle, color: Colors.blue, size: 80),
+                const SizedBox(height: 24),
+                const Text(
+                  'OAuth Callback Received!',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'If you can see this page, it means OAuth deep linking is working correctly.',
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                  textAlign: TextAlign.center,
+                ),
+                // Display deep link URI
+                const SizedBox(height: 24),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(
-                        Icons.error_outline,
-                        size: 64,
-                        color: Colors.red,
+                      const Text(
+                        'Deep Link URI:',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 8),
                       Text(
-                        'Sign In Failed',
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        _errorMessage!,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                      const SizedBox(height: 32),
-                      Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            OutlinedButton(
-                              onPressed: _handleGoToLogin,
-                              child: const Text('Go to Login'),
-                            ),
-                            const SizedBox(width: 16),
-                            ElevatedButton(
-                              onPressed: _handleRetry,
-                              child: const Text('Retry'),
-                            ),
-                          ],
+                        originalUri.toString(),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.black54,
+                          fontFamily: 'monospace',
                         ),
                       ),
                     ],
                   ),
-                )
-              : const SizedBox.shrink(),
+                ),
+                // Display query parameters if any
+                if (queryParams.isNotEmpty) ...[
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Query Parameters:',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        ...queryParams.entries.map(
+                          (entry) => Padding(
+                            padding: const EdgeInsets.only(bottom: 4),
+                            child: Text(
+                              '${entry.key}: ${entry.value}',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.black54,
+                                fontFamily: 'monospace',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 48),
+                ElevatedButton(
+                  onPressed: () {
+                    context.goNamed(HomeScreen.routeName);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 16,
+                    ),
+                  ),
+                  child: const Text('Go to Home'),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

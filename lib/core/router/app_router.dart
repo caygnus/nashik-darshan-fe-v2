@@ -243,14 +243,16 @@ enum DeepLinkType {
 String? handleRedirect(BuildContext context, GoRouterState state) {
   final uri = state.uri;
   final path = uri.path;
+  final scheme = uri.scheme;
 
-  // Handle deep links with custom scheme
-  if (uri.scheme == 'com.caygnus.nashikdarshan') {
+  // Only handle deep links with our custom scheme
+  // For normal navigation, scheme will be empty or 'http'/'https', not our custom scheme
+  if (scheme.isNotEmpty && scheme == 'com.caygnus.nashikdarshan') {
     final deepLinkType = DeepLinkType.fromUri(uri);
     return deepLinkType.getRoutePath(uri);
   }
 
-  // Handle protected routes
+  // Handle protected routes (only for normal app navigation, not deep links)
   final user = SupabaseConfig.client.auth.currentUser;
   if (user == null && protectedRoutes.contains(path)) {
     return LoginPage.routePath;
