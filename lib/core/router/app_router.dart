@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nashik/core/pages/bottom_bar_page.dart';
+import 'package:nashik/features/auth/presentation/pages/login_page.dart';
+import 'package:nashik/features/auth/presentation/pages/signup_page.dart';
+import 'package:nashik/features/auth/presentation/pages/splash_screen.dart';
 import 'package:nashik/features/category/presentation/pages/category_page.dart';
 import 'package:nashik/features/eatery/presentation/pages/eatery_screen.dart';
 import 'package:nashik/features/home/presentation/pages/home_screen.dart';
@@ -44,32 +47,6 @@ class Approuter {
                 name: HomeScreen.routeName,
                 pageBuilder: (context, state) =>
                     getPage(child: const HomeScreen(), state: state),
-                routes: [
-                  GoRoute(
-                    path: 'street-food',
-                    name: StreetFoodScreen.routeName,
-                    pageBuilder: (context, state) =>
-                        getPage(child: const StreetFoodScreen(), state: state),
-                  ),
-                  GoRoute(
-                    path: 'transport',
-                    name: TransportScreen.routeName,
-                    pageBuilder: (context, state) =>
-                        getPage(child: const TransportScreen(), state: state),
-                  ),
-                  GoRoute(
-                    path: 'hotels',
-                    name: HotelsScreen.routeName,
-                    pageBuilder: (context, state) =>
-                        getPage(child: const HotelsScreen(), state: state),
-                  ),
-                  GoRoute(
-                    path: 'eatery',
-                    name: EateryScreen.routeName,
-                    pageBuilder: (context, state) =>
-                        getPage(child: const EateryScreen(), state: state),
-                  ),
-                ],
               ),
             ],
           ),
@@ -107,6 +84,48 @@ class Approuter {
             ],
           ),
         ],
+      ),
+      GoRoute(
+        path: StreetFoodScreen.routePath,
+        name: StreetFoodScreen.routeName,
+        pageBuilder: (context, state) =>
+            getPage(child: const StreetFoodScreen(), state: state),
+      ),
+      GoRoute(
+        path: TransportScreen.routePath,
+        name: TransportScreen.routeName,
+        pageBuilder: (context, state) =>
+            getPage(child: const TransportScreen(), state: state),
+      ),
+      GoRoute(
+        path: HotelsScreen.routePath,
+        name: HotelsScreen.routeName,
+        pageBuilder: (context, state) =>
+            getPage(child: const HotelsScreen(), state: state),
+      ),
+      GoRoute(
+        path: EateryScreen.routePath,
+        name: EateryScreen.routeName,
+        pageBuilder: (context, state) =>
+            getPage(child: const EateryScreen(), state: state),
+      ),
+      GoRoute(
+        path: SplashScreen.routePath,
+        name: SplashScreen.routeName,
+        pageBuilder: (context, state) =>
+            getPage(child: const SplashScreen(), state: state),
+      ),
+      GoRoute(
+        path: LoginPage.routePath,
+        name: LoginPage.routeName,
+        pageBuilder: (context, state) =>
+            getPage(child: const LoginPage(), state: state),
+      ),
+      GoRoute(
+        path: SignupPage.routePath,
+        name: SignupPage.routeName,
+        pageBuilder: (context, state) =>
+            getPage(child: const SignupPage(), state: state),
       ),
     ];
     router = GoRouter(
