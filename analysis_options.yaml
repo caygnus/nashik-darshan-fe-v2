@@ -13,6 +13,39 @@ analyzer:
   plugins:
     - dart_code_metrics
 
+  # Enable strong mode and null safety
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+
+  # Error configuration
+  errors:
+    # Treat missing required parameters as errors
+    missing_required_param: error
+    # Treat missing return statements as errors
+    missing_return: error
+    # Treat undefined classes as errors
+    undefined_class: error
+    # Treat undefined methods as errors
+    undefined_method: error
+    # Treat undefined operators as errors
+    undefined_operator: error
+    # Treat deprecated members as warnings
+    deprecated_member_use: warning
+    # Treat invalid_annotation_target as warnings
+    invalid_annotation_target: warning
+    strict_raw_type: ignore
+
+  # Exclude generated files and build outputs from analysis
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/generated/**"
+    - "build/**"
+    - ".dart_tool/**"
+    - "**/*.mocks.dart"
+
 linter:
   # The lint rules applied to this project can be customized in the
   # section below to disable rules from the `package:flutter_lints/flutter.yaml`
@@ -25,16 +58,172 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
-    # Style rules
+    # ============================================
+    # Style and Formatting Rules
+    # ============================================
     prefer_single_quotes: true
     prefer_const_constructors: true
+    prefer_const_constructors_in_immutables: true
     prefer_const_declarations: true
-    avoid_print: true
-    always_declare_return_types: true
+    prefer_const_literals_to_create_immutables: true
+    prefer_final_fields: true
+    prefer_final_in_for_each: true
+    prefer_final_locals: true
+    # prefer_final_parameters: true
+    prefer_relative_imports: false
     sort_child_properties_last: true
-    unawaited_futures: true
-    avoid_void_async: true
-    directives_ordering: true
+    # sort_constructors_first: true
     sort_pub_dependencies: true
+    sort_unnamed_constructors_first: true
+    directives_ordering: true
+    library_names: true
+    library_prefixes: true
+    file_names: true
+    constant_identifier_names: true
+    non_constant_identifier_names: true
+
+    # ============================================
+    # Error Prevention Rules
+    # ============================================
+    always_declare_return_types: true
+    # always_put_required_named_parameters_first: true
+    always_specify_types: false # Too strict for most projects
+    # avoid_annotating_with_dynamic: true
+    avoid_bool_literals_in_conditional_expressions: true
+    avoid_catches_without_on_clauses: true
+    avoid_catching_errors: true
+    avoid_double_and_int_checks: true
+    avoid_empty_else: true
+    avoid_equals_and_hash_code_on_mutable_classes: true
+    avoid_escaping_inner_quotes: true
+    avoid_field_initializers_in_const_classes: true
+    avoid_function_literals_in_foreach_calls: true
+    avoid_implementing_value_types: true
+    avoid_init_to_null: true
+    avoid_null_checks_in_equality_operators: true
+    avoid_positional_boolean_parameters: true
+    avoid_print: true
+    avoid_private_typedef_functions: true
+    avoid_redundant_argument_values: true
+    avoid_relative_lib_imports: false
+    avoid_renaming_method_parameters: true
+    avoid_return_types_on_setters: true
+    avoid_returning_null: true
+    avoid_returning_null_for_future: true
+    avoid_returning_null_for_void: true
+    avoid_returning_this: true
+    avoid_setters_without_getters: true
+    avoid_shadowing_type_parameters: true
+    avoid_single_cascade_in_expression_statements: true
+    avoid_slow_async_io: true
+    avoid_type_to_string: true
+    avoid_types_as_parameter_names: true
+    avoid_unnecessary_containers: true
+    avoid_unused_constructor_parameters: true
+    avoid_void_async: true
+    cancel_subscriptions: true
+    close_sinks: true
+    no_adjacent_strings_in_list: true
+    no_duplicate_case_values: true
+    no_logic_in_create_state: true
+    prefer_asserts_in_initializer_lists: true
+    prefer_collection_literals: true
+    prefer_conditional_assignment: true
+    prefer_contains: true
+    prefer_equal_for_default_values: true
+    prefer_for_elements_to_map_fromIterable: true
+    prefer_function_declarations_over_variables: true
+    prefer_generic_function_type_aliases: true
+    prefer_if_elements_to_conditional_expressions: true
+    prefer_if_null_operators: true
+    prefer_initializing_formals: true
+    prefer_inlined_adds: true
+    prefer_int_literals: true
+    prefer_interpolation_to_compose_strings: true
+    prefer_is_empty: true
+    prefer_is_not_empty: true
+    prefer_is_not_operator: true
+    prefer_iterable_whereType: true
+    prefer_mixin: true
+    prefer_null_aware_operators: true
+    prefer_spread_collections: true
+    prefer_typing_uninitialized_variables: true
+    prefer_void_to_null: true
+    provide_deprecation_message: true
+    recursive_getters: true
+    slash_for_doc_comments: true
+    test_types_in_equals: true
+    throw_in_finally: true
+    unawaited_futures: true
+    unnecessary_await_in_return: true
+    unnecessary_brace_in_string_interps: true
+    unnecessary_const: true
+    unnecessary_constructor_name: true
+    unnecessary_getters_setters: true
+    unnecessary_lambdas: true
+    unnecessary_new: true
+    unnecessary_null_aware_assignments: true
+    unnecessary_null_checks: true
+    unnecessary_null_in_if_null_operators: true
+    unnecessary_nullable_for_final_variable_declarations: true
+    unnecessary_overrides: true
+    unnecessary_parenthesis: true
+    unnecessary_raw_strings: true
+    unnecessary_statements: true
+    unnecessary_string_escapes: true
+    unnecessary_string_interpolations: true
+    unnecessary_this: true
+    unnecessary_to_list_in_spreads: true
+    use_build_context_synchronously: true
+    use_colored_box: true
+    use_decorated_box: true
+    use_enums: true
+    use_full_hex_values_for_flutter_colors: true
+    use_function_type_syntax_for_parameters: true
+    use_if_null_to_convert_nulls_to_bools: true
+    use_is_even_rather_than_modulo: true
+    use_key_in_widget_constructors: true
+    use_late_for_private_fields_and_variables: true
+    use_named_constants: true
+    use_raw_strings: true
+    use_rethrow_when_possible: true
+    use_setters_to_change_properties: true
+    use_string_buffers: true
+    use_test_throws_matchers: true
+    use_to_and_as_if_applicable: true
+    valid_regexps: true
+    void_checks: true
+
+    # ============================================
+    # Documentation Rules
+    # ============================================
+    public_member_api_docs: false # Optional: enable if you want to enforce docs
+    package_api_docs: false # Optional: enable if you want to enforce docs
+
+
+    # ============================================
+    # Flutter-Specific Rules
+    # ============================================
+    # Note: Flutter-specific rules are already included via flutter_lints
+    # Additional Flutter rules can be added here if needed
+# Formatter Configuration
+# The Dart formatter is configured via command-line flags or IDE settings.
+# Default line length: 80 characters (can be configured in IDE settings)
+#
+# To format all Dart files:
+#   dart format .
+#
+# To format specific files:
+#   dart format lib/
+#
+# To check formatting without modifying files:
+#   dart format --set-exit-if-changed .
+#
+# The formatter automatically handles:
+# - Indentation (2 spaces)
+# - Line breaks
+# - Spacing around operators
+# - Import ordering (handled by directives_ordering lint rule)
+#
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
